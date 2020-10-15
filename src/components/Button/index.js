@@ -71,7 +71,9 @@ export function LoginButton( props) {
     return (
         <View style={styles.LoginButton}>
         <Button title=" Log In"
-        onPress={handleClick} >
+        // onPress={handleClick} 
+        onPress={props.onPress}
+        >
         </Button>
         </View>
     );
@@ -140,17 +142,19 @@ export function AboutUsButton(props) {
     );
 }
 export function EditProfileButton() {
-    const history = useHistory();
+    const navigation = useNavigation()
     function handleClick() {
-        history.push("/editprofile");
+        navigation.navigate('editProfile');
+
     }
     return (
         <View style={styles.editProfile}>
         <Button style={{marginLeft:"22%"}}
-            onClick={handleClick} >
-                <Text style={styles.editBtn}>
+            onPress={handleClick}
+            title="Edit Profile" >
+                {/* <Text style={styles.editBtn}>
              Edit Profile 
-            </Text>
+            </Text> */}
         </Button>
         </View>
     );
@@ -159,14 +163,14 @@ export function EditProfileButton() {
 export function MyProfileButton() {
     const history = useHistory();
     function handleClick() {
-        history.push("/profile");
+        history.push("profile");
     }
     return (
         <View style={styles.btn}>
         <Button 
         onClick={handleClick} >
                 <Text style={styles.btnLogin}>
-            My Profile 
+            Sign up
            </Text>
         </Button>
         </View>
@@ -332,13 +336,13 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     messagebutton: {
-        height: "73px",
-        width: "228px",
+        height: 73,
+        width: 228,
         // borderRadius:"0 17.5px 17.5px 0"
     },
     editProfile: {
-        height: "40px",
-        width: "140px",
+        height: 40,
+        width: 140,
         // border: "1px solid black",
         // float: "right",
         marginTop: "5%",
@@ -349,7 +353,7 @@ const styles = StyleSheet.create({
     XButton: {
         // border: "none",
         // display: "inline-block",
-        padding: "8px 16px",
+        padding: 16,
         // verticalAlign: "middle",
         overflow: "hidden",
         // textDecoration: "none",
@@ -362,7 +366,7 @@ const styles = StyleSheet.create({
     LoginModalButton:{
         // border: "none",
         // display: "inline-block",
-        padding: "8px 16px",
+        padding:  16,
         // verticalAlign: "middle",
         overflow: "hidden",
         // textDecoration: "none",
@@ -373,8 +377,8 @@ const styles = StyleSheet.create({
         // whiteSpace: "nowrap"
     },
     signUpButton:{
-        height:"40px",
-        width:"130px",
+        height:40,
+        width:130,
         // border:"1px solid black",
         // float:"right",
         fontSize:20,
@@ -385,8 +389,8 @@ const styles = StyleSheet.create({
         backgroundColor:"white",
     },
     HomeButton: {
-        height:"40px",
-        width:"130px",
+        height:40,
+        width:130,
         // border:"1px solid black",
         // float:"left",
         fontSize:20,
@@ -400,8 +404,8 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     abtUs: {
-        height:"40px",
-        width:"130px",
+        height:40,
+        width:130,
         // border:"1px solid black",
         // float:"left",
         fontSize:20,
@@ -420,8 +424,8 @@ const styles = StyleSheet.create({
         marginTop: " 5%"
     },
     modalOK : {
-        height:"40px",
-        width:"130px",
+        height:40,
+        width:130,
         // border:"1px solid black",
         // float:"right",
         fontSize:20,
@@ -434,6 +438,6 @@ const styles = StyleSheet.create({
         // backgroundImage: url("./images/dog-world-2.png"),
         backgroundColor: "rgb(232, 86, 86)",
         // backgroundBlendMode: "hard-light",
-        height: "378px"
+        height: 378
     }
 })

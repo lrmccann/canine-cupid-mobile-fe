@@ -5,7 +5,7 @@ import Col from "../Col";
 
 export default function ProfDetails(props) {
     return (
-        <View style={styles.profContainer} className="container theCont">
+        <View style={styles.profContainer}>
             <Col size="md-12">
                 <View style={styles.profDetails}>
                     <View style={styles.profContent}>
@@ -27,19 +27,20 @@ export default function ProfDetails(props) {
 
 const styles = StyleSheet.create({
     profContainer: {
-        marginTop : "6%"
+        marginTop : "30%",
+        height: "100%"
     },
     profDetails : {
         // border: "solid 1px black",
-        padding: "5px",
-        height: "80%",
+        padding: 5,
+        height: 225,
         backgroundColor: "white",
         /* width:100%; */
-        marginLeft: "20%",
+        // marginLeft: "25%",
         // float: "left",
-        width:"80%",
-        marginLeft: "65%",
-        marginTop: "5%",
+        width: "80%",
+        flexWrap: "nowrap",
+        // marginLeft: "65%",
         /* margin:auto; */
     },
     profContent : {
@@ -56,6 +57,6 @@ const styles = StyleSheet.create({
         marginBottom : "2%"
     },
     contentOne : {
-        fontSize : 16
+        fontSize : 10
     }
 });

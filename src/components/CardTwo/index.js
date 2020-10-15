@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Col from "../Col";
 import { StyleSheet, Text, View , Image, Button } from 'react-native';
 
-function CardTwo(props) {
+export default function CardTwo(props) {
   const [userPhotoLoaded, setUserPhotoLoaded] = useState(false)
   const [petPhotoLoaded, setPetPhotoLoaded] = useState(true)
   function switchPictures(){
@@ -10,7 +10,7 @@ function CardTwo(props) {
     if(props.img2 === undefined){
       setUserPhotoLoaded(false)
       return(
-        <div>Loading</div>
+        <View>Loading</View>
       )
     } else{
       setUserPhotoLoaded(true)

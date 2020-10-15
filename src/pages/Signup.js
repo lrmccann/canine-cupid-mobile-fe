@@ -1,33 +1,356 @@
-import React, { useState, useContext } from "react";
-// import { useHistory } from "react-router-dom";
-// import API from "../utils/API";
-// import UserContext from "../utils/UserContext"
+import React, { useState, useContext, useEffect, useRef } from "react";
+import { useHistory } from "react-router-dom";
+import API from "../utils/API";
+import UserContext from "../utils/UserContext"
 // import { Col, Row, Container } from "../components/Grid";
 // import { Input, TextArea, FormBtn } from "../components/Form";
 // import Modal from 'react-bootstrap/Modal';
 // import { ModalButton } from "../components/Button";
 // import RadioButton from "../components/RadioButton"
 // import {NavbarSignUp}from "../components/Navbar";
+// import  CheckBox   from '@react-native-community/checkbox';
 import Header from "../components/Header";
-import { Text, TextInput, View , StyleSheet , ScrollView } from "react-native";
-export default function Signup () {
+import { Text, TextInput, View, StyleSheet, ScrollView, Button, Alert } from "react-native";
+import { useForm, Controller } from "react-hook-form";
+import { useNavigation } from '@react-navigation/native';
+
+
+export default function Signup() {
+  // const [toggleCheckBox, setToggleCheckBox] = useState(false)
+  const { getData, getAllUsersNames } = useContext(UserContext)
+  const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
+  const { control, handleSubmit, getValues, setValue, register } = useForm();
+  const history = useHistory();
+  // Refs for focus
+  const userNameInputRef = React.useRef();
+  const passwordInputRef = React.useRef();
+  const petNameInputRef = React.useRef();
+  const zipecodeInputRef = React.useRef();
+  const cityInputRef = React.useRef();
+  const breedInputRef = React.useRef();
+  const ageInputRef = React.useRef();
+  const emailInputRef = React.useRef();
+  const petPhotoUrlInputRef = React.useRef();
+  const userPhotoUrlInputRef = React.useRef();
+  const infoInputRef = React.useRef();
+  const navigation = useNavigation()
+  // checkbox consts
+  const [checkVaccinated, setCheckVaccinated] = useState(false)
+  const [checkTrained, setCheckTrained] = useState(false)
+  const [checkPark, setCheckPark] = useState(false)
+  const [checkBall, setCheckBall] = useState(false)
+  const [checkFrisbee, setCheckFrisbee] = useState(false)
+
+
+  const onsubmit = async data => {
+         navigation.navigate('profile')
+    // let formValid = formFrontendValidations();
+    // if (formValid === true) {
+    await API.saveUser({
+      password: data.password,
+      userData: {
+        userName: data.userName,
+        petName: data.petName,
+        zipCode: data.zipcode,
+        city: data.city,
+        breed: data.breed,
+        age: data.age,
+        // park: checkPark,
+        // ball: checkBall,
+        // frisbee: checkFrisbee,
+        // vaccinated: checkVaccinated,
+        // trained: checkTrained,
+        email: data.email,
+        petPhotoUrl: data.petPhotoUrl,
+        userPhotoUrl: data.userPhotoUrl,
+        info: data.info
+      }
+    })
+      // }
+      .then(res => handleSignupResponse(res))
+      .catch(error => console.log(error.response))
+
+    // console.log('Form Data' , data );
+  }
+
+  const getAllNames = async  (sessionToken, arrYes ) => {
+    console.log("getAllNames")
+    await API.getAllUsers(sessionToken)
+      .then((res) => {
+        //  arr1 of all users Names received in response get filtered to exclude Logged user from the array, result in arr2
+        const arr1 = res.data;
+        function checkUserName(name) {
+          // if (name !== formObject.userName) {
+            return name;
+          // }
+        }
+        const arr2 = arr1.filter(checkUserName)
+
+        // arrYes conteined users name mutched by Loged user, all those name should be exlused from arr2, result in data
+        const filteredNames = function () {
+          const arr3 = arr2.filter(e => arrYes.findIndex(i => i === e) === -1);
+          return arr3;
+        };
+
+        const data = filteredNames();
+
+        getAllUsersNames(data)
+      }
+      )
+  }
+  //   // Handles updating component state when the user types into the input field
+
+  // function handleInputChange(event) {
+  //   event.preventDefault();
+  //   const { name, value } = event.target;
+  //    setFormObject({ ...formObject, [name]: value })
+  // };
+
+  function handleSignupResponse(res) {
+    console.log("res.data", res.data)
+    if (res.data === "User name already taken.") {
+      let errorMsg = res.data;
+      showModal(errorMsg);
+    } else {
+      console.log("res.data", res.data)
+      getData(res.data);
+      getAllNames(res.data.sessionToken, res.data.matchesYes);
+      navigation.navigate('profile')
+    };
+  };
+  // function formFrontendValidations() { 
+  //   let validEmailFormat = validEmailRegex.test(formObject.email)
+  //   let userNameValid = 'userName' in formObject && (formObject.userName.length > 4 && formObject.userName.length < 21)
+  //   let passwordValid = 'password' in formObject && (formObject.password.length > 4 && formObject.password.length < 21)
+  //   let emailValid = 'email' in formObject && formObject.email.length > 0 && validEmailFormat
+  //   let petNameValid = 'petName' in formObject && formObject.petName.length > 0    
+  //   console.log("valids", userNameValid, passwordValid, emailValid, petNameValid) 
+  //   let fieldsValid = userNameValid && passwordValid && emailValid && petNameValid
+  //   if (!fieldsValid) {
+  //     let errorMsg = "Please fill ALL the required fields correctly i.e. Username (5-20 characters) , Password (5-20 Characters) , Email (in valid @format) and Petname (required)";
+  //     // showModal(errorMsg);
+  //     return false
+  //   }
+  //   else {
+  //     return true
+  //   };
+  // };
   return (
     <ScrollView >
       <View style={styles.signupCont}>
-      {/* <View style={styles.header}> */}
-      <Header />
-      {/* </View> */}
-<View style={styles.userInfo}>
-<TextInput style={styles.userInfoInput} />
-<TextInput style={styles.userInfoInput} />
-<TextInput style={styles.userInfoInput} />
-<TextInput style={styles.userInfoInput} />
-<TextInput style={styles.userInfoInput} />
-</View>
-
-
-</View>
-</ScrollView>
+        {/* <View style={styles.header}> */}
+        <Header />
+        <Text style={{ fontSize: 30 }}>User Info</Text>
+        <View style={styles.userInfo}>
+          <Text>Username</Text>
+          <Controller
+            name="userName"
+            defaultValue=""
+            control={control}
+            onFocus={() => {
+              userNameInputRef.current.focus()
+            }}
+            render={({ onChange, onBlur, value }) =>
+              <TextInput
+                onBlur={onBlur}
+                ref={userNameInputRef}
+                style={styles.userInfoInput}
+                onChangeText={value =>
+                  onChange(value)
+                }
+              />}
+          />
+          <Text>Password</Text>
+          <Controller
+            name="password"
+            defaultValue=""
+            control={control}
+            onFocus={() => {
+              passwordInputRef.current.focus()
+            }}
+            render={({ onChange, onBlur, value }) =>
+              <TextInput
+                onBlur={onBlur}
+                ref={passwordInputRef}
+                style={styles.userInfoInput}
+                onChangeText={value =>
+                  onChange(value)
+                } />}
+          />
+          <Text>User photo url</Text>
+          <Controller
+            name="userPhotoUrl"
+            defaultValue=""
+            control={control}
+            onFocus={() => {
+              userPhotoUrlInputRef.current.focus()
+            }}
+            render={({ onChange, onBlur, value }) =>
+              <TextInput
+                onBlur={onBlur}
+                ref={userPhotoUrlInputRef}
+                style={styles.userInfoInput}
+                onChangeText={value =>
+                  onChange(value)
+                } />}
+          />
+          <Text>Email</Text>
+          <Controller
+            name="email"
+            defaultValue=""
+            control={control}
+            onFocus={() => {
+              emailInputRef.current.focus()
+            }}
+            render={({ onChange, onBlur, value }) =>
+              <TextInput
+                onBlur={onBlur}
+                ref={emailInputRef}
+                style={styles.userInfoInput}
+                onChangeText={value =>
+                  onChange(value)
+                } />}
+          />
+          <Text>City</Text>
+          <Controller
+            name="city"
+            defaultValue=""
+            control={control}
+            onFocus={() => {
+              cityInputRef.current.focus()
+            }}
+            render={({ onChange, onBlur, value }) =>
+              <TextInput
+                onBlur={onBlur}
+                ref={cityInputRef}
+                style={styles.userInfoInput}
+                onChangeText={value =>
+                  onChange(value)
+                }
+              />}
+          />
+          <Text>Zipcode</Text>
+          <Controller
+            name="zipcode"
+            defaultValue=""
+            control={control}
+            onFocus={() => {
+              zipecodeInputRef.current.focus()
+            }}
+            render={({ onChange, onBlur, value }) =>
+              <TextInput
+                onBlur={onBlur}
+                ref={zipecodeInputRef}
+                style={styles.userInfoInput}
+                onChangeText={value =>
+                  onChange(value)
+                } />}
+          />
+        </View>
+        <Text style={{ fontSize: 30, marginTop: "15%" }}>Pet Info</Text>
+        <View style={styles.petInfo}>
+          <Text>Pet Name</Text>
+          <Controller
+            name="petName"
+            defaultValue=""
+            control={control}
+            onFocus={() => {
+              petNameInputRef.current.focus()
+            }}
+            render={({ onChange, onBlur, value }) =>
+              <TextInput
+                onBlur={onBlur}
+                ref={petNameInputRef}
+                style={styles.userInfoInput}
+                onChangeText={value =>
+                  onChange(value)
+                }
+              />}
+          />
+          <Text>Breed</Text>
+          <Controller
+            name="breed"
+            defaultValue=""
+            control={control}
+            onFocus={() => {
+              breedInputRef.current.focus()
+            }}
+            render={({ onChange, onBlur, value }) =>
+              <TextInput
+                onBlur={onBlur}
+                ref={breedInputRef}
+                style={styles.userInfoInput}
+                onChangeText={value =>
+                  onChange(value)
+                } />}
+          />
+          <Text>Pet age</Text>
+          <Controller
+            name="age"
+            defaultValue=""
+            control={control}
+            onFocus={() => {
+              ageInputRef.current.focus()
+            }}
+            render={({ onChange, onBlur, value }) =>
+              <TextInput
+                onBlur={onBlur}
+                ref={ageInputRef}
+                style={styles.userInfoInput}
+                onChangeText={value =>
+                  onChange(value)
+                } />}
+          />
+          <Text>Pet photo url</Text>
+          <Controller
+            name="petPhotoUrl"
+            defaultValue=""
+            control={control}
+            onFocus={() => {
+              petPhotoUrlInputRef.current.focus()
+            }}
+            render={({ onChange, onBlur, value }) =>
+              <TextInput
+                onBlur={onBlur}
+                ref={petPhotoUrlInputRef}
+                style={styles.userInfoInput}
+                onChangeText={value =>
+                  onChange(value)
+                } />}
+          />
+          {/* <CheckBox
+            disabled={false}
+            value={toggleCheckBox}
+            onValueChange={(newValue) => setToggleCheckBox(newValue)}
+          name="frisbee"
+          checked={checkFrisbee}
+          onChange={(event) => setCheckFrisbee(event.target.checked)}
+          /> */}
+          <Text>More info</Text>
+          <Controller
+            name="info"
+            defaultValue=""
+            control={control}
+            onFocus={() => {
+              infoInputRef.current.focus()
+            }}
+            render={({ onChange, onBlur, value }) =>
+              <TextInput
+                onBlur={onBlur}
+                ref={infoInputRef}
+                style={styles.userInfoInput}
+                onChangeText={value =>
+                  onChange(value)
+                } />}
+          />
+        </View>
+        <Button title="Sign Up"
+          // onPress={handleSubmit(handleFormSubmit)
+          onPress={handleSubmit(onsubmit)
+          }
+        ></Button>
+      </View>
+    </ScrollView>
   )
 }
 const styles = StyleSheet.create({
@@ -35,12 +358,12 @@ const styles = StyleSheet.create({
     flex: 1
   },
   signupCont: {
-    backgroundColor : "rgb(232, 86, 86)",
+    backgroundColor: "rgb(232, 86, 86)",
     height: 1200
   },
   headerCont: {
-    flex : 1,
-    height : "50%",
+    flex: 1,
+    height: "50%",
     width: "100%"
   },
   userInfo: {
@@ -51,12 +374,16 @@ const styles = StyleSheet.create({
   userInfoInput: {
     backgroundColor: "rgb(255, 250 , 250)",
     width: "75%",
-    marginBottom:"5%",
+    marginBottom: "5%",
+  },
+  petInfo: {
+    flex: 10,
+    marginLeft: "15%"
   }
-  })
+})
 
 // export default function Signup() { 
-  
+
 //   const { getData, getAllUsersNames } = useContext(UserContext)
 //   const history = useHistory();
 //   const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
@@ -72,7 +399,7 @@ const styles = StyleSheet.create({
 //   console.log("checkPark", checkPark);
 //   console.log("checkBall", checkBall);
 //   console.log("checkFrisbee", checkFrisbee);
-   
+
 //   ////////////// Code for Modal //////
 //   const [isOpen, setIsOpen] = useState(false);
 //   const [isErrorMessage, setIsErrorMessage] = useState();
@@ -150,7 +477,7 @@ const styles = StyleSheet.create({
 //     };
 //   };
 //   // -------------------------------------------------- 
-  
+
 //   // When the form is submitted, use the API.saveUser method to save the User data
 //   function handleFormSubmit(event) {
 //     event.preventDefault();
@@ -181,7 +508,7 @@ const styles = StyleSheet.create({
 //         .catch(error => console.log(error.response));
 //       };
 //     };
-  
+
 //   return (
 //     <View>
 //       <NavbarSignUp />

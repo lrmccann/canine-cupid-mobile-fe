@@ -1,36 +1,58 @@
-import React, { useContext ,useState } from "react";
+import React, { useContext ,useEffect,useState } from "react";
 import Header from ".././components/Header";
-// import UserContext from "../utils/UserContext";
+import UserContext from "../utils/UserContext";
 // import { Row, Container } from "../components/Grid";
 import Card from "../components/Card";
-// import ProfDetails from "../components/ProfDetails";
+import ProfDetails from "../components/ProfDetails";
 // import Col from "../components/Col";
 // import Navbar from "../components/Navbar";
 // import { EditProfileButton } from "../components/Button";
 // import Map from "../components/map";
 // // import Moment from 'react-moment';
-import { Text, View , StyleSheet, Image } from "react-native";
+import { Text, View , StyleSheet, Image, ScrollView } from "react-native";
+import { EditProfileButton } from "../components/Button";
 
 export default function Profile () {
+      const { user } = useContext(UserContext)
+      const [newUser , setNewUser] = useState({})
+      useEffect(()=>{
+        setNewUser(user)
+      })
+      console.log(newUser)
+
 return(
+  <ScrollView>
 <View style={styles.profileCont}>
     <View style={styles.headerCont}>
 <Header />
 </View>
-<Card />
+<Card
+userPhotoUrl = {newUser.userPhotoUrl} petPhotoUrl={newUser.petPhotoUrl}
+/>
 {/* <Image style={styles.card} source={require('./images/dog-for-login.png')} /> */}
+<ProfDetails>
+      <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text>User Name : {user.userName} </Text></View>
+      <View style={{ paddingTop: "4%" , marginLeft: "2.5%" }}><Text>Location: &nbsp;&nbsp;&nbsp;&nbsp;{user.city}</Text></View>
+      <View style={{ paddingTop: "4%" , marginLeft: "2.5%" }}><Text> Zip Code: &nbsp;&nbsp;&nbsp;&nbsp;{user.zipCode} </Text></View>
+      <View style={{ paddingTop: "4%", marginLeft: "2.5%"}}><Text>Interests: &nbsp;{user.interests}</Text></View>
+      <View style={{ paddingTop: "4%" , marginLeft: "2.5%" }}><Text>More about my pet: &nbsp;&nbsp;{user.info}</Text></View>
+      <View style={{ paddingTop: "4%" , marginLeft: "2.5%" }}><Text>Join Date: &nbsp;&nbsp;&nbsp;{user.readableDate}</Text></View>
+      <EditProfileButton />
+      </ProfDetails>
 
 
 
 
 
 </View>
+</ScrollView>
 )
 }
 const styles = StyleSheet.create({
     profileCont: {
       backgroundColor : "rgb(232, 86, 86)",
-      height: "100%"
+      height: "100%",
+      width:"100%"
     },
     headerCont: {
       flex : 2,

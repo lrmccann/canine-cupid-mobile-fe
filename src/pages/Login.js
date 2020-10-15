@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 // import Modal from 'react-bootstrap/Modal';
-// import API from "../utils/API";
-// import UserContext from "../utils/UserContext";
+import  API  from "../utils/API";
+import  UserContext  from "../utils/UserContext";
 // import { Col, Row, Container } from "../components/Grid";
 // import { Input } from "../components/Form";
 import { LoginButton, SignupButton } from "../components/Button";
@@ -11,76 +11,159 @@ import { LoginButton, SignupButton } from "../components/Button";
 import Header from "../components/Header";
 // import DogLogin from "./images/dog-for-login.png";
 // import LoginText from "./images/login-text.png";
-import { Button, Text, TextInput, View, ViewComponent , StyleSheet , TouchableHighlight , Image} from "react-native";
-import Profile from "./Profile";
+import { Button, Text, TextInput, View, ViewComponent, StyleSheet, TouchableHighlight, Image , Alert } from "react-native";
+import { useForm, Controller } from "react-hook-form";
+import { useNavigation } from '@react-navigation/native';
 
 
-export default function Login (props) {
-  const [pageOne , setPageOne] = useState(true)
-  let onpress = () => {
-    setPageOne(false)
+export default function Login(props) {
+  // const [loginObject, setLoginObject] = useState({})
+  const history = useHistory();
+  const { getData, getAllUsersNames} = useContext(UserContext)
+  const { control, handleSubmit, getValues, setValue, register } = useForm();
+  // Refs for focus
+  const userNameInputRef = React.useRef();
+  const passwordInputRef = React.useRef();
+  const navigation = useNavigation()
+
+
+  // function handleInputChange(event) {
+  //   const { name, value } = event.target;
+  //   setLoginObject({ ...loginObject, [name]: value })
+  // };
+
+  const handleLoginSubmit = async data => {
+    // event.preventDefault();
+    console.log( "DAAAATTAA",data)
+    if (data.userName && data.password) {
+      await API.checkUser({
+        userName: data.userName,
+        password: data.password
+      })
+        .then(res => handleAuthenticatedResponse(res))
+        .catch(error => console.log(error));
+    }
+  };
+
+    const getAllNames = async  (sessionToken, arrYes, arrNo) => {
+    console.log("getAllNames")
+    let newdata = getValues();
+    console.log( "newdataaaaa" ,newdata)
+    await API.getAllUsers(sessionToken)
+      .then((res) => {
+        //  arr1 of all users Names received in response get filtered to exclude Logged user from the array, result in arr2
+        const arr1 = res.data;
+        function checkUserName(name) {
+          if (name !== newdata.userName) {
+            return name;
+          }
+        }
+        const arr2 = arr1.filter(checkUserName)
+
+        // arrYes conteined names of the users matched by Loged user, all those names should be exlused from arr2, result in data
+        const filteredNamesYes = function () {
+          const data = arr2.filter(e => arrYes.findIndex(i => i === e) === -1);
+          return data;
+        };
+        const arr3 = filteredNamesYes();
+
+        // arrNo conteined names of the users matched by Loged user, all those names should be exlused from arr3, result in data
+        const filteredNamesNo = function () {
+          const data = arr3.filter(e => arrNo.findIndex(i => i === e) === -1);
+          return data;
+        };
+        const arr4 = filteredNamesNo();
+
+        getAllUsersNames(arr4)
+      })
   }
-  let onpressTwo = () => {
-    setPageOne(true)
-  }
-  if(pageOne === true){
-  return( <View style={styles.mainCont}>
-<View style={styles.headerCont}>
-    <Header />
+
+    function handleAuthenticatedResponse(res) {
+    if (res.data === "User not found.") {
+      // let errorMsg = "User Not Found!";
+      console.log("wrong username")
+      // showModal(errorMsg);
+    } else if (res.data === "Wrong password.") {
+      // let errorMsg = "Password is Wrong!";
+      console.log("wrong password")
+      // showModal(errorMsg);
+    } else {
+      console.log("res.data", res.data);
+      getData(res.data);
+      getAllNames(res.data.sessionToken, res.data.matchesYes, res.data.matchesNo);
+      // getAllUsersID(allID);
+      // console.log("allID",allID);
+      // history.push("profile");
+      navigation.navigate('profile')
+    };
+  };
+
+
+  return (
+  <View style={styles.mainCont}>
+    <View style={styles.headerCont}>
+      <Header />
     </View>
     <View style={styles.userNameCont} >
       <Text style={styles.loginText}>Username</Text>
-      <TextInput style={styles.TextInputStuff}  {...props} editable/>
-  {/* <Text>Hello</Text> */}
-  {/* </View> */}
-  {/* <View style={styles.passwordCont} > */}
-    <Text style={styles.loginText}>Password</Text>
-      <TextInput style={styles.TextInputStuffTwo}  {...props} editable/>
-  {/* <Text>Hello</Text> */}
-  </View>
-  <View style={styles.loginBtn}>
-    <LoginButton  />
-    <SignupButton />
-    {/* <Button style={styles.loginBtn} onPress={onpress} title="Log In"></Button> */}
-  </View>
-  {/* <Button title="i button" onPress={onpress}></Button> */}
-  {/* <TouchableHighlight onPress={onpress} >
-  <View style={styles.touchView}>
-    <View style={styles.button}>
-      <Text>I am button</Text>
+      <Controller
+      name="userName"
+      defaultValue="none"
+      control={control}
+      onFocus={() => {
+        userNameInputRef.current.focus()
+      }}
+      render={({onChange , onBlur , value}) =>
+      <TextInput 
+      style={styles.TextInputStuff}
+        onBlur={onBlur}
+        ref={userNameInputRef}
+        placeholder="8 - 20 characters"
+        onChangeText={value =>
+        onChange(value)
+        }
+      />}
+    />
+      
+      <Text style={styles.loginText}>Password</Text>
+      <Controller
+      name="password"
+      defaultValue="none"
+      control={control}
+      onFocus={()=>{
+        passwordInputRef.current.focus()
+      }}
+      render={({onChange, onBlur , value}) =>
+      <TextInput 
+      style={styles.TextInputStuffTwo}
+      onBlur={onBlur}
+      ref={passwordInputRef}
+        placeholder="8 - 20 characters"
+        onChangeText={value => 
+        onChange(value)
+        }
+        />}
+      />
     </View>
+    <View style={styles.loginBtn}>
+      <LoginButton
+        // disabled={!(data.userName && data.password)}
+        onPress={handleSubmit(handleLoginSubmit)}
+      />
+      <SignupButton />
     </View>
-  </TouchableHighlight> */}
   </View>
   )
-  }
-  if(pageOne === false){
-    return( <View style={styles.mainCont}>
-      <View>
-      <Header />
-      </View>
-      <View>
-    <Text>Hello</Text>
-    </View>
-    <Button title = "i button as well" onPress={onpressTwo} prof={Profile} ></Button>
-    <TouchableHighlight onClick={onpressTwo} >
-      <View style={styles.button}>
-        <Text>I was pressed now I false</Text>
-      </View>
-    </TouchableHighlight>
-    </View>
-    )
-  }
 }
 
 const styles = StyleSheet.create({
   mainCont: {
-    backgroundColor : "rgb(232, 86, 86)",
+    backgroundColor: "rgb(232, 86, 86)",
     height: "100%"
   },
   headerCont: {
-    flex : 2,
-    height : "50%",
+    flex: 2,
+    height: "50%",
     width: "100%"
   },
   userNameCont: {
@@ -108,18 +191,18 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginLeft: 50,
     // marginTop: -80
-  }, 
-  loginBtn : {
+  },
+  loginBtn: {
     color: "rgb( 0 , 0 ,0)",
     height: "20%",
   },
-  loginText : {
-    fontSize : 18,
-    marginBottom : 10,
-    marginLeft : 50, 
-    marginTop : 20
+  loginText: {
+    fontSize: 18,
+    marginBottom: 10,
+    marginLeft: 50,
+    marginTop: 20
   }
-  })
+})
 
 // export default function Login() {
 
