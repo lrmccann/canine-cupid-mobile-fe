@@ -27,7 +27,11 @@ import { StatusBar } from 'expo-status-bar';
 // import "./node_modules/react-native-gesture-handler";
 import MainStackNavigator from "./src/Navigation/MainStackNavigator";
 import { createStackNavigator } from '@react-navigation/stack';
+// import Navbar from './src/components/Navbar';
 // import  {AsyncLocalStorage}  from '@react-native-community/async-storage';
+// import Router from "./src/Navigation/TabBar";
+import TabBar from './src/Navigation/TabBar';
+import { View } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -130,10 +134,13 @@ export default function App() {
     //   getAllMatchesForMatchesPage,
     //   getCurrentUserIpAddressForContext
     // }}>
-      <MainStackNavigator>
+    <View style={{minHeight:"100%"}}>
+      <MainStackNavigator >
        <StatusBar style="auto" />
-     </MainStackNavigator>
-    //  </UserProvider>
+    {/* //  </UserProvider> */}
+    </MainStackNavigator>
+    {/* <TabBar /> */}
+    </View>
 
   );
   

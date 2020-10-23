@@ -5,12 +5,15 @@ import CardTwo from "../components/CardTwo";
 import SwipeBtn from "../components/SwipeBtn";
 import ProfDetails from "../components/ProfDetails";
 import Col from "../components/Col";
-import Navbar from "../components/Navbar";
+// import Navbar from "../components/Navbar";
 import API from "../utils/API";
 import UserContext from "../utils/UserContext"
 // import Moment from 'react-moment';
 import FlashMessage from "react-flash-message";
-import { StyleSheet, Text, View , Image } from 'react-native';
+import { StyleSheet, Text, View , Image , Button , ScrollView } from 'react-native';
+// import Swipeable from 'react-native-swipeable';
+import { TouchableHighlight } from "react-native-gesture-handler";
+
 
 export default function Matchnow () {
     
@@ -180,73 +183,87 @@ export default function Matchnow () {
     };
 
     return (
-        <View>
-            <Navbar />
-            <View style={{ backgroundColor: "rgb(232, 86, 86)", textAlign: "center", width: "80%", height: "110px", paddingTop: "2%", borderRadius: "25px", marginLeft: "9%", marginBottom: "3%", fontFamily: "Georgia, serif" }}>
-                <Text style={{ fontSize : "24px" , color: "white", fontSize: "45px" }}>Get yo pup the lovin they deserve and match now!</Text>
-            </View>
-            <Container>
-                <Row>
+        <ScrollView >
+        {/* <View>  */}
+            {/* <Navbar /> */}
+            <View style={{ backgroundColor: "rgb(232, 86, 86)", textAlign: "center", width: "100%", height: 1200, paddingTop: "2%", fontFamily: "Georgia, serif" }}>
+                <Text style={{ fontSize : 20 , color: "white" }}>Get yo pup the lovin they deserve and match now!</Text>
+            <View style={styles.matchNowCont}>
+                <View style={{flexDirection : "row"}}>
                     <Col size="md-3">
-                        <SwipeBtn
-                            size="lg"
-                            variant="danger"
-                            direction="left"
-                            onClick={handleNoSubmit}
-                        />
-                         {status2 && (
+                        <TouchableHighlight 
+                        style={styles.swipeable}
+                        // title="idkfive"
+                            // size="lg"
+                            // variant="danger"
+                            // direction="left"
+                            onPress={handleNoSubmit}
+                        ><Text>Swipe no</Text></TouchableHighlight>
+                         {/* {status2 && (
                             <FlashMessage duration={10000} >
-                               <Text style={{backgroundColor:"rgb(232, 86, 86)", fontSize:"25px", fontColor: "white", fontFamily: "Georgia, serif" , fontWeight: "bolder"}}>REJECTED!</Text>
+                               <Text style={{backgroundColor:"rgb(232, 86, 86)", fontSize:25, fontColor: "white", fontFamily: "Georgia, serif" , fontWeight: "bolder"}}>REJECTED!</Text>
                             </FlashMessage>
-                        )}
+                        )} */}
                     </Col>
+                    <View style={styles.card}>
                     <Col size="md-6">
-                        <CardTwo petName={nextUserData.petName} img1={nextUserData.petPhotoUrl} img2={nextUserData.userPhotoUrl} message={"User Pic"} messageTwo={"Dog Pic"}>
+                        <CardTwo petName={nextUserData.petName} breed={nextUserData.breed} 
+                        age ={nextUserData.age} userName={newUserData.userName} email={nextUserData.email}
+                        city={newUserData.city}
+                        img1={nextUserData.petPhotoUrl} img2={nextUserData.userPhotoUrl} 
+                        message={"User Pic"} messageTwo={"Dog Pic"}>
                             <View style={{float:"left" ,width:"50%"}}>
-                            <View style={{ paddingTop: "10%", paddingLeft: "4%" }}><Text> Pet name:  &nbsp;&nbsp;{nextUserData.petName} </Text></View>
-                            <View style={{ paddingTop: "12%", paddingLeft: "4%" }}><Text>Breed:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {nextUserData.breed}</Text> </View>
-                            <View style={{ paddingTop: "12%", paddingLeft: "4%" }}><Text>Age:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {nextUserData.age}</Text> </View>
+                            <Text style={{ paddingTop: "10%", paddingLeft: "4%" }}>Pet name:  &nbsp;&nbsp;{nextUserData.petName}</Text>
+                            <Text style={{ paddingTop: "12%", paddingLeft: "4%" }}>Breed:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{nextUserData.breed}</Text>
+                            <Text  style={{ paddingTop: "12%", paddingLeft: "4%" }}>Age:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{nextUserData.age}</Text>
                             </View>
                             <View style={{float: "left" ,width:"50%" }}>
-                            <View style={{marginTop:"12%", marginLeft: "5%" , fontSize:"25px"  }}><Text>Vaccinated: {vaccinated}</Text></View>
-                            <View style={{ marginTop: "12%", marginLeft: "5%" , fontSize:"25px" }}><Text>Trained: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{trained}</Text></View>
+                            {/* <View style={{marginTop:"12%", marginLeft: "5%" , fontSize:"25px"  }}><Text>Vaccinated: {vaccinated}</Text></View> */}
+                            {/* <View style={{ marginTop: "12%", marginLeft: "5%" , fontSize:"25px" }}><Text>Trained: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{trained}</Text></View> */}
                             </View>
                         </CardTwo>
                     </Col>
+                    </View>
 
                     <Col size="md-3">
-                        <SwipeBtn
-                            size="lg"
-                            variant="success"
-                            direction="right"
-                            onClick={handleYesSubmit}
-                        />
-                        {status && (
+                        <TouchableHighlight
+                        style={styles.swipeableTwo}
+                        // title="idkfour"
+                            // size="lg"
+                            // variant="success"
+                            // direction="right"
+                            onPress={handleYesSubmit}
+                        >
+                            <Text>Swipe yes</Text>
+                        </TouchableHighlight>
+                        {/* {status && (
                             <FlashMessage duration={500000} >
-                               <Text style={{ fontWeight:"bolder" ,backgroundColor:"rgb(232, 86, 86)", fontSize:"25px", fontColor: "white", fontFamily: "Georgia, serif"}}>MATCHED!</Text>
+                               <Text style={{ fontWeight:"bolder" ,backgroundColor:"rgb(232, 86, 86)", fontSize:25, fontColor: "white", fontFamily: "Georgia, serif"}}>MATCHED!</Text>
                             </FlashMessage>
-                        )}
+                        )} */}
     
                     </Col>
-                </Row>
-            </Container>
-            <Container fluid>
-                <Row>
+                </View>
+            </View>
+            <View fluid>
+                <View style={{flexDirection : "row"}}>
                     <Col size="md-10">
                         <View >
                         <ProfDetails>
-                        <View> <Text>Username:&nbsp;{nextUserData.userName}</Text> </View>
-                        <View style={{paddingTop: "3%"}}><Text>Location:&nbsp;&nbsp;&nbsp;&nbsp;{nextUserData.city}</Text></View>
-                        <View style={{paddingTop: "3%" }}><Text>Zip Code:&nbsp;&nbsp;&nbsp;{nextUserData.zipCode}</Text></View>
-                        <View style={{paddingTop: "3%" }}><Text>Join Date:&nbsp;&nbsp;{readableDate}</Text></View>
-                        <View style={{paddingTop: "3%"}}><Text>About my pet:&nbsp;&nbsp;{nextUserData.info}</Text></View>
+                        
+                             <Text>Username:&nbsp;{nextUserData.userName}</Text> 
+                             
+                        <View style={{paddingTop: "3%"}}><Text>Location:&nbsp;&nbsp;&nbsp;&nbsp;<Text>{nextUserData.city}</Text></Text></View>
+                        <View style={{paddingTop: "3%" }}><Text>Zip Code:&nbsp;&nbsp;&nbsp;<Text>{nextUserData.zipCode}</Text></Text></View>
+                        {/* <View style={{paddingTop: "3%" }}><Text>Join Date:&nbsp;&nbsp;{readableDate}</Text></View> */}
+                        <View style={{paddingTop: "3%"}}><Text>About my pet:&nbsp;&nbsp;<Text>{nextUserData.info}</Text></Text></View>
                         </ProfDetails>
                         </View>
                     </Col>
-                </Row>
-            </Container>
+                </View>
+            </View>
             {/* ----------------------Rendering Modal */}
-            <Modal style={styles.myModal} show={isOpen} onHide={hideModal}>
+            {/* <Modal style={styles.myModal} show={isOpen} onHide={hideModal}>
                 <Modal.Header>
                     <Modal.Title> <Text>Oooopsy!</Text></Modal.Title>
                 </Modal.Header>
@@ -254,11 +271,13 @@ export default function Matchnow () {
                 style={{fontweight:"bolder"}}
                 >{isErrorMessage}</Modal.Body>
                 <Modal.Footer>
-                <Button style={{ height:"40px" ,width:"130px" , border:"1px solid black" ,float:"right" ,fontSize:"20px" ,marginRight:".2%" ,marginBottom:".3%" ,fontWeight:"bolder" ,backgroundColor:"white"}} onClick={hideModal}><Text>Ok</Text></Button>
+                <Button title="idktwo" style={{ height:40 ,width:130 ,float:"right" ,fontSize:20 ,marginRight:".2%" ,marginBottom:".3%" ,fontWeight:"bolder" ,backgroundColor:"white"}} onClick={hideModal}><Text>Ok</Text></Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal> */}
             {/* ------------------------------------ */}
+        {/* </View> */}
         </View>
+        </ScrollView>
     );
 }
 const styles = StyleSheet.create({
@@ -266,6 +285,36 @@ const styles = StyleSheet.create({
         // backgroundImage: url("./images/dog-world-2.png"),
         backgroundColor:"rgb(232, 86, 86)",
         // background-blend-mode: hard-light;
-        height: "378px"
+        // height: 378
+    },
+    matchNowCont: {
+        // flex: 20,
+        backgroundColor: "rgb(232, 86, 86)",
+        height: 1200
+    },
+    swipeable: {
+        // flex: 10,
+        // activeOpacity: 0.6,
+        backgroundColor: "rgb(100, 100 , 100 )",
+        // float: "right",
+        height : "40%",
+        width: 30,
+        // zIndex: 100,
+        position: "relative",
+        alignSelf: "flex-start"
+    },
+    swipeableTwo : {
+        backgroundColor: "rgb(200, 200 , 200 )",
+        // float: "right",
+        height : "40%",
+        width: 30,
+        // zIndex: 1,
+        position: "relative",
+        // marginLeft: "50%",
+        alignSelf: "flex-end"
+    },
+    card: {
+        flex: 5,
+        alignSelf : "center"
     }
   });

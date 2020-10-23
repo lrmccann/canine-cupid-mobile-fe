@@ -9,6 +9,7 @@ export default function SwipeBtn (props) {
 
     return (
     <Button
+    title="idksix"
     className={`btn-${size} btn-${variant}`}{...props}
     >
         <View 
@@ -21,16 +22,16 @@ export default function SwipeBtn (props) {
 
 const styles = StyleSheet.create({
     "btn-danger": {
-        height: "95px",
-        width: "95px",
+        height: 95,
+        width: 95,
         // border: "solid black 1px",
         position: "relative",
         marginTop: "65%",
         marginRight: "23%"
     },
     "btn-success" : {
-        height: "95px",
-        width: "95px",
+        height: 95,
+        width: 95,
         // border: "solid black 1px",
         position: "relative",
         marginTop: "65%",
@@ -39,16 +40,16 @@ const styles = StyleSheet.create({
     "arrow-right" : {
         // borderRight: "10px solid",
         // borderBottom: "10px solid",
-        height: "30px",
-        width: "30px",
+        height: 30,
+        width: 30,
         // transform: "rotate(-45deg)",
         marginLeft: "20%"
     }, 
     "arrow-left" : {
         // borderRight: "10px solid",
         // borderBottom: "10px solid",
-        height: "30px",
-        width: "30px",
+        height: 30,
+        width: 30,
         // transform: "rotate(135deg)",
         marginLeft: "28%"
     }

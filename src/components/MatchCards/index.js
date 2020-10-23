@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import {Row } from "../Grid";
+import {Row , Container } from "../Grid";
 import Col from "../Col";
 import Modal from 'react-bootstrap/Modal';
 import Map from "../map";
 import UserContext from "../../utils/UserContext";
-import { View , Image, TextInput, Text , StyleSheet } from 'react-native';
+import { View , Image, TextInput, Text , StyleSheet , Button } from 'react-native';
 
 
 
@@ -52,10 +52,10 @@ export default function MatchCards(props) {
         }
         return (
             <Container fluid>
-                <Modal id={thisUser.userName} style={styles.userModalContent} show={isOpen} onHide={hideModal}>
+                {/* <Modal id={thisUser.userName} style={styles.userModalContent} show={isOpen} onHide={hideModal}>
                     <Modal.Header>
                         <Modal.Title> <Text style={styles.modalHeader}>{thisUser.userName}'s Profile</Text></Modal.Title>
-                        <Button style={styles.modalXBtn} onClick={hideModal}>X</Button>
+                        <Button style={styles.modalXBtn} onClick={hideModal}><Text>X</Text></Button>
                     </Modal.Header>
                     <View style={styles.contentModalContent} >
                         <Modal.Body>
@@ -75,37 +75,39 @@ export default function MatchCards(props) {
                         </Row>
                         </Modal.Body>
                     </View>
-                </Modal>
+                </Modal> */}
                 {props.arrayData.map((item, myKey) => (
                     <View key={myKey}>
                         {console.log(myKey)}
                         {/* {console.log(item.userData.userName)} */}
-                        <Row-fixed>
-                        <View style={{display:"flex", width:"100%"}}>
-                            <View className="mainCont ">
-                                    <Col size="md-2" className="image-col">
+                        {/* <Row> */}
+                        <View style={{flexDirection: "row", width:"100%"}}>
+                            <View style={styles.mainCont}>
+                                    <View style={{flexDirection:"row"}}>
                                     <View style={styles.image} >
                                         <View>
-                                            <Image style={styles.img}  src={item.userData.petPhotoUrl} alt={item.userData.userName} />
+                                            <Image style={styles.img}  source={item.userData.petPhotoUrl} alt={item.userData.userName} />
                                             <View>
-                                                <Text style={{fontSize : "10.72px"}}><Button id={item.userData.userName} style={styles.userNameBtn} onClick={(e) => (showuserDetails(e.target.id))}>{item.userData.userName}</Button></Text>
+                                                {/* <Text style={{fontSize : "10.72px"}}> */}
+                                                    <Button title="click" id={item.userData.userName} style={styles.userNameBtn} onClick={(e) => (showuserDetails(e.target.id))}>{item.userData.userName}</Button>
+                                                {/* </Text> */}
                                             </View>
                                         </View>
                                         </View>
-                                    </Col>
+                                    </View>
                                     <Col size="md-7">
                                     <View style={styles.messages}>
-                                        <Text style={styles.text} >{item.userData.userName}{props.message}</Text>
+                                        <Text style={styles.text}>{item.userData.userName}{props.message}</Text>
                                         </View>
                                     </Col>
                                     <Col size="md-3 ">
                                     <View style={styles.messageBtn} >
-                                            <View style={{ borderTopRightRadius: "15px", borderBottomRightRadius: "15px", borderTopLeftRadius: "0px", borderBottomLeftRadius: "0px" }} type="submit" className="btn" href={item.userData.email}><Text className="btnText" style={{ fontFamily: "Arial", fontWeight: "bolder" }}>Message Now</Text></View>
+                                            <View style={{ borderTopRightRadius: 15, borderBottomRightRadius: 15, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} type="submit" className="btn" href={item.userData.email}><Text className="btnText" style={{ fontFamily: "Arial", fontWeight: "bolder" }}>Message Now</Text></View>
                                         </View>
                                     </Col>
                             </View>
                             </View>
-                        </Row-fixed>
+                        {/* </Row> */}
                     </View>
                 ))}
             </Container>
@@ -121,6 +123,18 @@ const styles = StyleSheet.create({
         textAlign:"center",
         fontSize:25
     },
+    mainCont : {
+        height: 76,
+        marginLeft: "2%",
+        width: "95%",
+        // overflow: hidden,
+        // display: flex;
+        flexWrap: "nowrap",
+        flexDirection: "row",
+        borderRadius: 17.5,
+        backgroundColor: "white",
+        marginBottom: "1.5%"
+    },
     modalXBtn : {
         // backgroundColor: "inherit", 
         textAlign: "center", 
@@ -128,27 +142,27 @@ const styles = StyleSheet.create({
         // whiteSpace: "nowrap", 
         // border: "none", 
         // display: "inline-block", 
-        padding: "8px 16px", 
+        padding: 8 
         // verticalAlign: "middle", 
         // overflow: "hidden", 
         // textDecoration: "none", 
         // color: "inherit"
     },
     contentModalContent : {
-        height: "400px",
+        height: 400,
         width: "auto",
         overflow: "scroll",
         backgroundColor:"rgb(232, 86, 86)" 
     },
     mapboxDiv: {
-        height: "430px",
-        maxHeight: "430px",
-        width: "450px",
-        maxWidth: "450px",
+        height: 430,
+        maxHeight: 430,
+        width: 450,
+        maxWidth: 450,
         marginTop : "10%"
     },
     image: {
-    height: "100%",
+    height: "20%",
     width: "37%",
     // float: "left",
     /* position: absolute; */
@@ -159,8 +173,9 @@ const styles = StyleSheet.create({
         padding: "3%",
         height: "65%",
         width: "58%",
+        marginTop: 20,
         backgroundColor: "blue",
-        // borderRadius: "50px"
+        borderRadius: 50
     },
     userNameBtn : {
         // border: "none",
@@ -171,7 +186,7 @@ const styles = StyleSheet.create({
         width: "100%",
         /* float: left; */
         /* position: relative;  */
-        marginLeft: "inherit",
+        // marginLeft: "inherit",
         textAlign: "center",
         // whiteSpace: "nowrap",
         color:"black",
@@ -179,7 +194,7 @@ const styles = StyleSheet.create({
     },
     text: {
     /* padding-top: 8%; */
-    fontSize: 22,
+    fontSize: 15,
     // fontWeight: 450
     /* float: left; */
     },
@@ -189,7 +204,7 @@ const styles = StyleSheet.create({
     // float: "right",
     position: "relative",
     /* white-space: nowrap; */
-    marginLeft: "inherit"
+    // marginLeft: "inherit"
     /* text-align: center; */
     /* margin-left: 29.5%; */ 
     }

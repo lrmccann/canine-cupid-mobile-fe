@@ -7,7 +7,8 @@ import { MessageButton } from "../components/Button";
 import "../components/MatchCards/images/small-profile-pic-one.png";
 import Map from "../components/map";
 import UserContext from "../utils/UserContext";
-import { StyleSheet, Text, View , Image } from 'react-native';
+import { StyleSheet, Text, View , Image, ScrollView } from 'react-native';
+import AsyncStorage from "@react-native-community/async-storage";
 
 
 function Matches() {
@@ -29,18 +30,19 @@ useEffect(()=>{
   if(isLoading){
     return (
       <View>
-      <Navbar />
-    <View>Loading</View>
+      {/* <Navbar /> */}
+    <View><Text>Loading</Text></View>
     </View>
     )
   }
   if(!isLoading){
     return (
-      <View>
-        <Navbar />
-        <View style={{ backgroundColor:"rgb(232, 86, 86)", textAlign: "center" , width:"80%" ,  height:"110px" , paddingTop:"2%"  , borderRadius : "25px" , marginLeft:"9%" , marginBottom:"3%" , fontFamily: "Georgia, serif"}}>
+      <ScrollView>
+      <View style={{backgroundColor : "rgb(232, 86, 86)" , height: 1300}}>
+        {/* <Navbar /> */}
+        <View style={{ backgroundColor:"rgb(232, 86, 86)" , width:"100%" ,  height:70 , paddingTop:"2%"  , borderRadius : "25px" , marginLeft:"9%" , marginBottom:"3%" , fontFamily: "Georgia, serif"}}>
           {/* top     right      bottom      left  */}
-        <Text style={{ fontSize:"24px", color:"white" , fontSize:"45px"}}>{user.userName}'s Matches</Text>
+        <Text style={{ color:"white" , fontSize:30}}>{user.userName}'s Matches</Text>
         {/* <div className="line" style={{ border: "solid black 2px", margin: "4% 10% 5% 10%" }}></div> */}
         </View>
         <Container fixed>
@@ -48,11 +50,11 @@ useEffect(()=>{
             <Col size="md-12">
               <MatchCards
                 arrayData={finalUser}
-                message={" sent you a message, reply now!"}
+                message={<Text> sent you a message, reply now!</Text>}
                 image="https://cdn.iconscout.com/icon/free/png-256/user-avatar-contact-portfolio-personal-portrait-profile-6-5623.png"
-                {...MessageButton}
+                // {...MessageButton}
               >
-                      <Map height="200px" width="200px"/>
+                      {/* <Map height="200px" width="200px"/> */}
                 </MatchCards>
             </Col>
       </Row>
@@ -63,6 +65,7 @@ useEffect(()=>{
       {/* <Map/> */}
     </Container>
     </View>
+    </ScrollView>
     ); 
       }
       }

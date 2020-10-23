@@ -10,15 +10,15 @@ import ProfDetails from "../components/ProfDetails";
 // import Map from "../components/map";
 // // import Moment from 'react-moment';
 import { Text, View , StyleSheet, Image, ScrollView } from "react-native";
-import { EditProfileButton } from "../components/Button";
+import { EditProfileButton, MatchesButton, MatchNowButton } from "../components/Button";
+import { propTypes } from "react-bootstrap/esm/Image";
+import { BottomTabNav } from "../Navigation/CustomNavBar";
+import TabBar from "../Navigation/TabBar";
+
 
 export default function Profile () {
       const { user } = useContext(UserContext)
       const [newUser , setNewUser] = useState({})
-      useEffect(()=>{
-        setNewUser(user)
-      })
-      console.log(newUser)
 
 return(
   <ScrollView>
@@ -26,8 +26,14 @@ return(
     <View style={styles.headerCont}>
 <Header />
 </View>
+<MatchesButton />
+<MatchNowButton />
 <Card
-userPhotoUrl = {newUser.userPhotoUrl} petPhotoUrl={newUser.petPhotoUrl}
+userPhotoUrl = {user.userPhotoUrl}
+petPhotoUrl={user.petPhotoUrl}
+petname={user.petName}
+breed={user.breed}
+age={user.age}
 />
 {/* <Image style={styles.card} source={require('./images/dog-for-login.png')} /> */}
 <ProfDetails>
@@ -45,6 +51,7 @@ userPhotoUrl = {newUser.userPhotoUrl} petPhotoUrl={newUser.petPhotoUrl}
 
 
 </View>
+{/* <TabBar /> */}
 </ScrollView>
 )
 }
@@ -52,7 +59,8 @@ const styles = StyleSheet.create({
     profileCont: {
       backgroundColor : "rgb(232, 86, 86)",
       height: "100%",
-      width:"100%"
+      width:"100%",
+      // justifyContent:"center"
     },
     headerCont: {
       flex : 2,

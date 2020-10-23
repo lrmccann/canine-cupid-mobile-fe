@@ -13,10 +13,11 @@ import Header from "../components/Header";
 import { Text, TextInput, View, StyleSheet, ScrollView, Button, Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigation } from '@react-navigation/native';
+import { CheckBox } from 'react-native-elements'
 
 
 export default function EditProfile() {
-  // const [toggleCheckBox, setToggleCheckBox] = useState(false)
+  const [toggleCheckBox, setToggleCheckBox] = useState(false)
   const { getData, getAllUsersNames , user } = useContext(UserContext)
   const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
   const { control, handleSubmit, getValues, setValue, register } = useForm();
@@ -44,45 +45,12 @@ export default function EditProfile() {
   const [checkBall, setCheckBall] = useState(user.ball)
   const [checkFrisbee, setCheckFrisbee] = useState(user.frisbee)
 
-
-
-//   const onsubmit = async data => {
-//          navigation.navigate('profile')
-//     let formValid = formFrontendValidations();
-//     if (formValid === true) {
-//     await API.saveUser({
-//       password: data.password,
-//       userData: {
-//         userName: data.userName,
-//         petName: data.petName,
-//         zipCode: data.zipcode,
-//         city: data.city,
-//         breed: data.breed,
-//         age: data.age,
-//         park: checkPark,
-//         ball: checkBall,
-//         frisbee: checkFrisbee,
-//         vaccinated: checkVaccinated,
-//         trained: checkTrained,
-//         email: data.email,
-//         petPhotoUrl: data.petPhotoUrl,
-//         userPhotoUrl: data.userPhotoUrl,
-//         info: data.info
-//       }
-//     })
-//       .then(res => handleSignupResponse(res))
-//       .catch(error => console.log(error.response))
-//   }
-// }
-
-
-    const handleFormSubmit = data => {  /////////////////////////// DELETE THIS LATER AND MOVE TO HANDLEPROFILERESPONSE
-      navigation.navigate('profile') /////////////////////////// DELETE THIS LATER AND MOVE TO HANDLEPROFILERESPONSE
+    const handleFormSubmit = data => {  
     // event.preventDefault();
-    // let formValid = formFrontendValidations();
+    let formValid = formFrontendValidations();
     // console.log("formValid", formValid)
     // console.log("user.userName", user.userName)
-    // if (formValid === true) {
+    if (formValid === true) {
       // formObject.vaccinated = checkVaccinated
       // formObject.trained = checkTrained
       // formObject.park = checkPark
@@ -94,23 +62,27 @@ export default function EditProfile() {
       }, user.userName)
         .then(res => handleEditProfileResponse(res))
         .catch(error => console.log(error.response));
+        navigation.navigate('profile')
+    }
     };
 
-    //    function formFrontendValidations() { 
-//     let validEmailFormat = validEmailRegex.test(formObject.email)  
-//     let emailValid = 'email' in formObject && formObject.email.length > 0 && validEmailFormat
-//     let petNameValid = 'petName' in formObject && formObject.petName.length > 0    
-//     console.log("valids", emailValid, petNameValid) 
-//     let fieldsValid = emailValid && petNameValid
-//     if (!fieldsValid) {
-//       let errorMsg = "Please fill ALL the required fields correctly i.e. Email (in valid @format) and Petname (required)";
-//       showModal(errorMsg);
-//       return false
-//     }
-//     else {
-//       return true
-//     }
-//   }
+       function formFrontendValidations() { 
+         let newVal = getValues()
+         console.log(newVal)
+    let validEmailFormat = validEmailRegex.test(newVal.email)  
+    let emailValid = newVal.email.length > 0 && validEmailFormat
+    let petNameValid = newVal.petName.length > 0    
+    console.log("valids", emailValid, petNameValid) 
+    let fieldsValid = emailValid && petNameValid
+    if (!fieldsValid) {
+      let errorMsg = "Please fill ALL the required fields correctly i.e. Email (in valid @format) and Petname (required)";
+      // showModal(errorMsg);
+      return false
+    }
+    else {
+      return true
+    }
+  }
 
     function handleEditProfileResponse(res) {
       // const navigation = useNavigation()
@@ -303,14 +275,35 @@ export default function EditProfile() {
                   onChange(value)
                 } />}
           />
-          {/* <CheckBox
+          <View style={{flexDirection: "row"}}>
+          <Text>Playing with a frisbee :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+          <CheckBox
             disabled={false}
             value={toggleCheckBox}
             onValueChange={(newValue) => setToggleCheckBox(newValue)}
           name="frisbee"
           checked={checkFrisbee}
           onChange={(event) => setCheckFrisbee(event.target.checked)}
-          /> */}
+          />
+          <Text> Playing in the park :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </Text>
+          <CheckBox
+            name="park"
+            defaultValue={user.park}       
+            defaultChecked={user.park}
+            defaultChecked={checkPark}       
+            checked={checkPark}
+            onChange={(event) => setCheckPark(event.target.checked)}     
+          />
+            <Text> Playing with a ball :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </Text>
+            <CheckBox
+              name="ball"
+              defaultValue={user.ball}  
+              defaultChecked={user.ball}          
+              defaultChecked={checkBall}            
+              checked={checkBall}
+              onChange={(event) => setCheckBall(event.target.checked)}
+            />
+            </View>
           <Text>More info</Text>
           <Controller
             name="info"

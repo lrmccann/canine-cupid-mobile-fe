@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator , createSwitchNavigator } from '@react-navigation/stack'
+import { BaseRouter, NavigationContainer, NavigationRouteContext } from '@react-navigation/native';
+import { createStackNavigator ,  createSwitchNavigator } from '@react-navigation/stack';
+import { createAppContainer } from "react-navigation";
+  import {createBottomTabNavigator } from "react-navigation-tabs";
 import  AsyncStorage  from '@react-native-community/async-storage';
 import { UserProvider } from "../utils/UserContext";
 import { Text , StyleSheet } from "react-native";
+
+
 
 import Login from '../pages/Login';
 import AboutUs from '../pages/AboutUs';
@@ -13,8 +17,20 @@ import Matchnow from '../pages/Matchnow';
 import Signup from '../pages/Signup';
 import Profile from '../pages/Profile';
 import { View } from "react-native";
+import {Navbar} from "../components/Navbar";
+import TabBar from "./TabBar";
+import routes from "../../app.json";
+// import {
+//     AboutUsScreen,
+//     EditProfileScreen,
+//     LoginScreen,
+//     MatchesScreen,
+//     MatchNowScreen,
+//     ProfileScreen,
+//     SignupScreen
+// } from "../screens/index";
 
-// import Stupid from "../pages/Stupid"
+console.log(routes.routes[0].component)
 
 
 
@@ -35,13 +51,12 @@ export default function MainStackNavigator() {
   const [currentUserIp , setCurrentUserIp] = useState("")
   console.log("currentUserIp" , currentUserIp);
 
-    const STORAGE_KEY = JSON.stringify(user)
-    console.log(STORAGE_KEY , "this is storage key")
+
+    const STORAGE_KEY = user.sessionToken
     const syncSet = async () => {
       try{
-        // await AsyncStorage.setItem('user', JSON.stringify(user));
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-        console.log(user , "helllllooooooooooo")
+        console.log(STORAGE_KEY)
+        await AsyncStorage.setItem('STORAGE_KEY' , STORAGE_KEY);
       }
     catch (error) {
       throw error;
@@ -51,17 +66,18 @@ export default function MainStackNavigator() {
   useEffect( () => {
     syncSet()
   }, [] )
-console.log(AsyncStorage)
+  console.log(STORAGE_KEY , "i am sync storage")
 
 const syncGet = async () => {
   if (user === undefined) {
-    return (<View><Text>Loading</Text></View>)
-  } if( user !== undefined){
+    // return (<View><Text>Loading</Text></View>)
+  // } 
+  // if( user !== undefined){
     try{
       // const raw = await AsyncStorage.getItem(user)
       const raw = await AsyncStorage.getItem('user')
-      setUser(JSON.parse(raw))
-      console.log(raw)
+      let hello = JSON.parse(raw)
+      setUser(hello)
       }catch (error) {
       throw error;
     }
@@ -86,7 +102,6 @@ useEffect( () => {
     }
   },[]
   )
-
 
   // const storeData = async (value) => {
   //   try{
@@ -117,8 +132,10 @@ useEffect( () => {
   const getCurrentUserIpAddressForContext = (data) => {
     setCurrentUserIp(currentUserIp=>{return currentUserIp = data})
   }
-  
+  // console.log(NavigationRouteContext , "base route")        // here we want to log the routes / screen keys to use in our bottom tab
+  // navigator once we figure that out
   return (
+    // <View>
     <UserProvider value = {{
       user,
       newUserData,
@@ -135,58 +152,205 @@ useEffect( () => {
       getCurrentUserIpAddressForContext
     }}>
     <NavigationContainer >
+    {/* <Navbar /> */}
+    {/* <View> */}
       <Stack.Navigator initialRouteName="home" style={styles.header}>
         <Stack.Screen
          name='aboutUs'
           component={AboutUs}
           options={{
-          headerShown : false
+          // headerShown : false
           }} />
         <Stack.Screen
          name='home' 
          component={Login}
          options={{
-         headerShown: false
+          //  title :"Login"
+        //  headerShown: false
          }}/>
         <Stack.Screen
          name='signup' 
          component={Signup}
          options={{
-           headerShown:false
+          //  title :"signup"
+          //  headerShown:false
          }} />
         <Stack.Screen 
         name='profile' 
         component={Profile}
         options={{
-          headerShown:false
+          // headerShown:false
         }} />
         <Stack.Screen 
         name='editProfile' 
         component={EditProfile}
         options={{
-          headerShown:false
+          // headerShown:false
         }} />
         <Stack.Screen 
         name='matchNow' 
         component={Matchnow}
         options={{
-          headerShown:false
+          // headerShown:false
         }} />
         <Stack.Screen 
         name='matches' 
         component={Matches}
         options={{
-          headerShown:false
+          // headerShown:false
         }} />
         {/* <Stack.Screen name='matches' component={Matches} /> */}
       </Stack.Navigator>
+      {/* </View> */}
      </NavigationContainer>
      </UserProvider>
+    //  </View>
   )
 }
+
+
+//  const BottomTabNav = () => {
+//   const Screens = createBottomTabNavigator()
+
+//   return(
+//           <NavigationContainer>
+//             <Stack.Navigator initialRouteName = "home">
+//             <Screens.Screen 
+//         name='aboutUs' 
+//         component={AboutUs}
+//         options={{
+//           // headerShown:false
+//         }} />        
+//         <Screens.Screen 
+//         name='editProfile' 
+//         component={EditProfile}
+//         options={{
+//           // headerShown:false
+//         }} />        
+//         <Screens.Screen 
+//         name='login' 
+//         component={Login}
+//         options={{
+//           // headerShown:false
+//         }} />        
+//         <Screens.Screen 
+//         name='matches' 
+//         component={Matches}
+//         options={{
+//           // headerShown:false
+//         }} />        
+//         <Screens.Screen 
+//         name='matchNow' 
+//         component={Matchnow}
+//         options={{
+//           // headerShown:false
+//         }} />        
+//         <Screens.Screen 
+//         name='profile' 
+//         component={Profile}
+//         options={{
+//           // headerShown:false
+//         }} />
+//                 <Screens.Screen 
+//         name='signup' 
+//         component={Signup}
+//         options={{
+//           // headerShown:false
+//         }} />
+
+
+
+//             </Stack.Navigator>
+//           </NavigationContainer>
+
+
+
+
+
+
+//   )
+//  }
+
+
+// const BottomTabNav = createBottomTabNavigator(
+//   {
+//     LoginScreen: {
+//       screen: Login,
+//       navigationOptions: {
+//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
+//         TabBarLabel: "A",
+//         // currentTabIndex: 1
+//       }
+//     },
+//     ProfileScreen: {
+//       screen: ProfileScreen,
+//       navigationOptions: {
+//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
+//         TabBarLabel: "B",
+//         // currentTabIndex: 1
+//       }
+//     },
+//     MatchNowScreen: {
+//       screen: MatchNowScreen,
+//       navigationOptions: {
+//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
+//         TabBarLabel: "C",
+//         // currentTabIndex: 1
+//       }
+//     },
+//     EditProfileScreen: {
+//       screen: EditProfileScreen,
+//       navigationOptions: {
+//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
+//         TabBarLabel: "D",
+//         // currentTabIndex: 1
+//       }
+//     },
+//     MatchesScreen: {
+//       screen: MatchesScreen,
+//       navigationOptions: {
+//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
+//         TabBarLabel: "E",
+//         // currentTabIndex: 1
+//       }
+//     }, AboutUsScreen: {
+//       screen: AboutUsScreen,
+//       navigationOptions: {
+//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
+//         TabBarLabel: "F",
+//         // currentTabIndex: 1
+//       }
+//     }, SignupScreen: {
+//       screen: SignupScreen,
+//       navigationOptions: {
+//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
+//         TabBarLabel: "G",
+//         // currentTabIndex: 1
+//       }
+//     },
+//   },
+//   {
+//     tabBarComponent: TabBar,
+//     swipeEnabled: true,
+//     tabBarOptions: {
+//       activeTintColor: "#01597d",
+//       inactiveTintColor: "#ffffff",
+//     }
+//   }
+// )
+// export default createAppContainer(BottomTabNav)
+
+
+
 
 const styles = StyleSheet.create({
   header: {
     backgroundColor: "rgb(0 , 0 , 0)"
+  },
+  bottomNav: {
+    height: 100,
+    backgroundColor: "black",
+    width :"100%"
+
   }
 })

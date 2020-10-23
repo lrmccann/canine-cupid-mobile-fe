@@ -27,8 +27,10 @@ export default function ProfDetails(props) {
 
 const styles = StyleSheet.create({
     profContainer: {
-        marginTop : "30%",
-        height: "100%"
+        // justifyContent:"center",
+        marginTop : "8%",
+        height: 900,
+        marginLeft: "15%"
     },
     profDetails : {
         // border: "solid 1px black",
@@ -57,6 +59,7 @@ const styles = StyleSheet.create({
         marginBottom : "2%"
     },
     contentOne : {
-        fontSize : 10
+        fontSize : 10,
+        flexDirection : "column"
     }
 });

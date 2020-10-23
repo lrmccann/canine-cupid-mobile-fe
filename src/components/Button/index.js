@@ -5,6 +5,7 @@ import API from "../../utils/API";
 import UserContext from "../../utils/UserContext";
 import { Text, View , Image , Button , StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import  AsyncStorage  from '@react-native-community/async-storage';
 
 export function MatchButton(props) {
     return ( 
@@ -65,6 +66,11 @@ export function XButton(props) {
 // }
 export function LoginButton( props) {
     const navigation = useNavigation()
+    const { user  } = useContext(UserContext)
+    const STORAGE_KEY = user.sessionToken
+    // console.log(STORAGE_KEY)
+    AsyncStorage.setItem('STORAGE_KEY' , STORAGE_KEY);
+    console.log(AsyncStorage , "herrrrooooooo")
     function handleClick() {
        navigation.navigate('profile')
     }
@@ -126,14 +132,17 @@ export function HomeButton(props) {
     );
 }
 export function AboutUsButton(props) {
-    const history = useHistory();
+    const navigation = useNavigation()
+    // const history = useHistory();
     function handleClick() {
-        history.push("/aboutus");
+        // history.push("/aboutus");
+        navigation.navigate('aboutUs')
     }
     return (
         <View style={styles.abtUs}>
         <Button 
-        onClick={handleClick} >
+        title="Our Story"
+        onPress={handleClick} >
             <Text>
             Our Story
             </Text>
@@ -149,9 +158,9 @@ export function EditProfileButton() {
     }
     return (
         <View style={styles.editProfile}>
-        <Button style={{marginLeft:"22%"}}
+        <Button style={{marginLeft:"25%"}}
             onPress={handleClick}
-            title="Edit Profile" >
+            title="Edit" >
                 {/* <Text style={styles.editBtn}>
              Edit Profile 
             </Text> */}
@@ -179,7 +188,8 @@ export function MyProfileButton() {
 
 export function MatchNowButton() {
     const { allUsersNames, getAllUsersNames, getNewUserData, getNewUserName } = useContext(UserContext)
-    const history =  useHistory();
+    const navigation = useNavigation()
+    // const history =  useHistory();
     
     ////////////// Code for Modal //////
     const [isOpen, setIsOpen] = React.useState(false);
@@ -199,14 +209,15 @@ export function MatchNowButton() {
         await API.getUserByName(firstUser)
         // .then(response=>console.log(response))
         .then((response) =>{
-            getNewUserData(response.data); 
-            getNewUserName(response.data.userName)
-            history.push("/matchnow")
+             getNewUserData(response.data); 
+             getNewUserName(response.data.userName)
+            // history.push("/matchnow")
+            navigation.navigate('matchNow')
         }) 
         
     }
 
-    function handleClick() {
+    async function handleClick() {
        
         console.log ("length",allUsersNames.length)
         if(allUsersNames.length>0){ 
@@ -214,15 +225,15 @@ export function MatchNowButton() {
             // return items[~~(items.length * Math.random())];
             // }
             if(allUsersNames.length>1){
-            const firstUser = allUsersNames[0]
-            getUserData(firstUser)
-            const arr = allUsersNames
+            const firstUser = await allUsersNames[0]
+            await getUserData(firstUser)
+            const arr =  allUsersNames
             const newArr = arr.shift()
             console.log("newArr",newArr)
-            getAllUsersNames(arr)
+             getAllUsersNames(arr)
             } else {
-                const firstUser = allUsersNames[0]
-                getUserData(firstUser)
+                const firstUser =  allUsersNames[0]
+                 getUserData(firstUser)
             }
         } else {
             showModal("You've already reviewed all available users, please check your Matches.")
@@ -233,16 +244,16 @@ export function MatchNowButton() {
         <View>
         <View>
             <View>
-            <Button 
+            <Button title="Matchnow"
             // className="btn" 
-            onClick={()=>handleClick()} >
+            onPress={()=>handleClick()} >
                 <Text style={styles.btnLogin}>
                      Match Now 
             </Text>
             </Button>
             </View>
             {/* ----------------------Rendering Modal */}
-            <View style={styles.myModal}>
+            {/* <View style={styles.myModal}>
             <Modal show={isOpen} onHide={hideModal}>
                 <Modal.Header>
                     <Modal.Title>
@@ -260,7 +271,7 @@ export function MatchNowButton() {
                     </View>
                 </Modal.Footer>
             </Modal>
-            </View>
+            </View> */}
             {/* ------------------------------------ */}
         </View>
         </View>
@@ -269,7 +280,8 @@ export function MatchNowButton() {
 
 export function MatchesButton() {
     const {userForMatchesPage, getAllMatchesForMatchesPage, user} = useContext(UserContext)
-    const history = useHistory();
+    const navigation = useNavigation()
+    // const history = useHistory();
     let newVar = user
     const getUserDataById = async () => {
         await API.getMatchesYesByName(newVar.userName)
@@ -279,13 +291,15 @@ export function MatchesButton() {
     async function handleClick(user) {
         console.log(userForMatchesPage, "anytext")
         await getUserDataById(user)
-        .then(history.push("/matches"))
+        // .then(history.push("/matches"))
+        .then(navigation.navigate('matches'))
     }
     return (
         <View style={styles.btn}>
     <Button 
+    title="Matches"
     // className="btn" 
-    onClick={handleClick} >
+    onPress={handleClick} >
         <Text style={styles.btnLogin}>
        Matches
       </Text>
@@ -296,21 +310,23 @@ export function MatchesButton() {
 
 export function LogOutButton() {
     const { user, getData } = useContext(UserContext)
-    const history = useHistory();
+    // const history = useHistory();
+    // const navigation = useNavigation()
 
     useEffect(
-        ()=>{localStorage.setItem('user', JSON.stringify(user));
+        ()=>{AsyncStorage.setItem('user', JSON.stringify(user));
       }, [user])
 
     function handleClick() {
         getData("")
-        history.push("/login");
+        navigation.navigate("home");
     }
     return (
         <View style={styles.btn}>
         <Button 
+        title="Log Out"
         // className="btn" 
-        onClick={handleClick} >
+        onPress={handleClick} >
                 <Text style={styles.btnLogin}>
                    Log Out 
                   </Text>
@@ -321,6 +337,10 @@ export function LogOutButton() {
 
 
 const styles = StyleSheet.create({
+    btn: {
+        height: 30,
+        width: 40
+    },
     // matchbtn: {
     //     height: "100px",
     //     width: "500px",
@@ -341,14 +361,18 @@ const styles = StyleSheet.create({
         // borderRadius:"0 17.5px 17.5px 0"
     },
     editProfile: {
-        height: 40,
-        width: 140,
+        height: 45,
+        width: 80,
+        fontSize:10,
         // border: "1px solid black",
         // float: "right",
-        marginTop: "5%",
-        fontSize: 20,
+        // marginTop: "8%",
         // fontWeight: "bold",
-        backgroundColor: "rgb(232, 86, 86)"
+        backgroundColor: "rgb(210, 210  , 210 )",
+        borderTopLeftRadius : 25, 
+        borderTopRightRadius : 25, 
+        borderBottomLeftRadius: 25,
+        borderBottomRightRadius: 25
     },
     XButton: {
         // border: "none",
@@ -413,7 +437,7 @@ const styles = StyleSheet.create({
         marginTop:".28%",
         // fontWeight:"bold",
         color:"black",
-        backgroundColor:"white"
+        // backgroundColor:"white"
     },
     btnLogin: {
         color: "white",

@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useState , useContext } from "react";
 import Col from "../Col";
 import { StyleSheet, Text, View , Image, Button } from 'react-native';
-// import Photo from "../../pages/images/dog-for-login.png"
+import UserContext from "../../utils/UserContext";
+import "../../assets/images/man-for-test.jpeg";
+import "../../assets/images/corgi-for-test.png";
 
 
 export default function Card(props) {
+  const photoOne = require("../../assets/images/man-for-test.jpeg")
+  const photoTwo = require("../../assets/images/corgi-for-test.png")
   const [userPhoto , setUserPhoto] = useState()
   const [userPhotoLoaded, setUserPhotoLoaded] = useState(false)
   const [petPhotoLoaded, setPetPhotoLoaded] = useState(true)
+  const { user } = useContext(UserContext)
   console.log(props)
   function switchPictures(){
     // if(props.img2 === undefined){
@@ -17,10 +22,11 @@ export default function Card(props) {
     //   )
     // }
      {
-      setUserPhoto(props.img2)
+      // setUserPhoto(props.img2)
+      setUserPhoto(photoOne)
       setUserPhotoLoaded(true)
       setPetPhotoLoaded(false)
-      console.log(props.img2)
+      // console.log(PhotoOne)
     }
   }
   function switchPicturesTwo(){
@@ -41,12 +47,14 @@ export default function Card(props) {
         <View style={styles.card}>
           <View style={styles.imgContainer}>
             <Image style={styles.cardImage}
-            alt={props.petName} source={{uri: props.petPhotoUrl}}
+            alt={props.petName} source={photoOne}
             // src={props.petPhotoUrl} 
             />
           </View>
           <View style={styles.contentCard}>
-          <Text> {props.children} </Text>
+          <Text style={{fontSize:20 , fontWeight:"bold"}}> Name: {user.userName} </Text>
+           <Text style={{fontSize:20 , fontWeight:"bold"}}> Email: {user.email} </Text>
+           <Text style={{fontSize:20 , fontWeight:"bold"}}> City: {user.city} </Text>
           </View>
         </View>
       </Col>
@@ -63,10 +71,13 @@ export default function Card(props) {
         </View>
         <View style={styles.card}>
         <View style={styles.imgContainer}>
-            <Image style={styles.cardImage} alt={props.userName} source={props.userPhoto} />
+            <Image style={styles.cardImage} alt={props.userName} source={photoTwo} />
           </View>
           <View style={styles.contentCard}>
-           <Text> {props.children} </Text>
+           <Text style={{fontSize:20 , fontWeight:"bold"}}> Name: {user.petName} </Text>
+           <Text style={{fontSize:20 , fontWeight:"bold"}}> Breed: {user.breed} </Text>
+           <Text style={{fontSize:20 , fontWeight:"bold"}}> Age: {user.age} </Text>
+
           </View>
           </View>
       </Col>
@@ -93,14 +104,20 @@ const styles = StyleSheet.create ({
     borderBottomColor: "transparent",
     fontSize:25, 
     // marginLeft : 285
+    borderTopLeftRadius : 20, //////afas/fas/fa/
+    borderTopRightRadius : 25, /////asfasfasfsd
+    marginLeft : "72%"
   },
   switchPicBtn : {
+    marginLeft : "72%",
     height:20 , 
     width:"20%", 
     backgroundColor:"rgb(255, 250, 250)" , 
     // color:"white" , 
     borderColor: "rgb(0 , 0 , 0)" , 
     fontSize:25 , 
+    borderTopLeftRadius : 20, //////afas/fas/fa/
+    borderTopRightRadius : 25, /////asfasfasfsd
   },
   card: {
     // marginLeft:"25%",
@@ -118,6 +135,7 @@ const styles = StyleSheet.create ({
     borderTopColor: "rgb(0 , 0, 0)",
     backgroundColor: "rgb( 250, 250 , 250)", // black
     // marginLeft: 12
+    marginLeft : "7.5%"
   },
   imgContainer: {
     backgroundColor: "rgb(255 , 250, 250 )", // gray
@@ -128,7 +146,7 @@ const styles = StyleSheet.create ({
   },
   cardImage : {
     height : 100 , 
-    width : 100
+    width : 100,
     },
   userPhotoLoaded : {
     width: "20%" , 
@@ -141,7 +159,8 @@ const styles = StyleSheet.create ({
     borderWidth: 1,
     borderTopColor: "rgb(0 , 0, 0)",
     backgroundColor: "rgb( 250, 250 , 250)", // black,
-    height: "40%"
+    height: "40%",
+    justifyContent:"space-around"
   },
   cardImage : {
     width: "60%"

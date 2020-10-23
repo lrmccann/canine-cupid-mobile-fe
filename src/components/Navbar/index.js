@@ -1,16 +1,32 @@
 import React from "react"
 import { MyProfileButton, MatchNowButton, MatchesButton, LogOutButton, AboutUsButton, HomeButton, SignupButton } from "../Button"
 import { View , Text, Button , StyleSheet } from "react-native";
+// import { createStackNavigator , createSwitchNavigator } from '@react-navigation/stack'
+// import Login from '../../pages/Login';
 
 
 
 export function Navbar(props) {
+  // const Stack = createStackNavigator()
   return (
-    <View style={styles.navabr}>
-      <MyProfileButton />
-      <MatchNowButton />
+    <View style={styles.navbar}>
+      {/* <MyProfileButton /> */}
+      <View>
+      <MatchNowButton/>
+      {/* <Stack.Screen
+         name='home' 
+         component={Login}
+         options={{
+         headerShown: false
+         }}/> */}
+      </View>
+      <View>
       <MatchesButton />
+      </View>
+      <View>
       <LogOutButton />
+      </View>
+      {/* <Text style={{color: "white"}}>Helllloooo</Text> */}
     </View>
   );
 }
@@ -52,12 +68,15 @@ export function NavbarSignUp(props) {
 
 const styles = StyleSheet.create({
   navbar: {
-    overflow: "hidden",
-    backgroundColor: "rgb(232, 86, 86)",
+    flexDirection:"row",
+    // overflow: "hidden",
+    // backgroundColor: "rgb(0 , 0 , 0)",
     fontFamily: "Arial",
-    height: "50px",
-    marginBottom: "4%",
-    width: "100%"
+    height: "10%",
+    // marginBottom: "4%",
+    marginTop: "10%",
+    width: "100%",
+    alignContent:"space-between"
   },
   navbarLogin : {
     overflow: "hidden",

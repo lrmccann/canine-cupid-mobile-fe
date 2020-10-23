@@ -25,19 +25,23 @@ export default function CardTwo(props) {
   if(petPhotoLoaded === true){
     console.log(props , "hello")
     return (
-      <Col size="md-6">
+      <View>
+       {/* <Col size="md-6"> */}
         <View style={styles.imgContainer}>
             {/*  may need to change button style     */}
-          <Button onClick={switchPictures} style={{height:"50px" , width:"128px", backgroundColor:"rgb(232, 86, 86" , color:"white" , border: "none" , fontSize:"25px" , padding: "5%"}}>{props.message}</Button></View>
+          <Button title="User photo" onPress={switchPictures} style={{height:50 , width:128, backgroundColor:"rgb(232, 86, 86" , color:"white" , border: "none" , fontSize:25 , padding: "5%"}}>{props.message}</Button></View>
           <View style={styles.card}>
         <View style={styles.imgContainer}>
-            <Image style={styles.cardImage} alt={props.userName} src={props.img1} />
+            <Image style={styles.cardImage} alt={props.userName} source={props.img1} />
             </View>
             <View style={styles.contentCard}>
-          <Text> {props.children} </Text>
+            <Text style={{fontSize:20 , fontWeight:"bold"}}> Name: {props.petName} </Text>
+           <Text style={{fontSize:20 , fontWeight:"bold"}}> Breed: {props.breed} </Text>
+           <Text style={{fontSize:20 , fontWeight:"bold"}}> Age: {props.age} </Text>
           </View>
           </View>
-      </Col>
+          </View>
+      //  </Col>
     );
   } if(userPhotoLoaded === true){
     console.log(props)
@@ -45,14 +49,16 @@ export default function CardTwo(props) {
       <Col size="md-6">
           <View style={styles.imgContainer}>
             {/*  may need to change button style     */}
-        <Button onClick={switchPicturesTwo} style={{height:"50px" , width:"128px", backgroundColor:"rgb(232, 86, 86" , color:"white" , border: "none" , fontSize:"25px" , padding: "5%"}}>{props.messageTwo}</Button>
+        <Button title="Pet photo" onPress={switchPicturesTwo} style={{height:50 , width:128, backgroundColor:"rgb(232, 86, 86" , color:"white" , border: "none" , fontSize:25 , padding: "5%"}}>{props.messageTwo}</Button>
         </View>
         <View style={styles.card}>
         <View style={styles.imgContainer}>
-            <Image alt={props.userName} src={props.img2} />
+            <Image alt={props.userName} source={props.img2} />
             </View>
           <View style={styles.contentCard}>
-          <Text> {props.children} </Text>
+          <Text style={{fontSize:20 , fontWeight:"bold"}}> Name: {props.userName} </Text>
+           <Text style={{fontSize:20 , fontWeight:"bold"}}> Email: {props.email} </Text>
+           <Text style={{fontSize:20 , fontWeight:"bold"}}> City: {props.city} </Text>
           </View>
           </View>
       </Col>
@@ -63,13 +69,14 @@ export default function CardTwo(props) {
 
 const styles = StyleSheet.create ({
   switchPicBtnDiv: {
+    flex:1,
     width: "20%" , 
     // float:"left", 
     marginLeft:"8.2%"
   },
   switchPicBtn : {
-    height:"50px" , 
-    width:"128px", 
+    height:50 , 
+    width:128, 
     backgroundColor:"rgb(232, 86, 86)" , 
     color:"white" , 
     // border: "none" , 
@@ -77,31 +84,40 @@ const styles = StyleSheet.create ({
     padding: "5%"
   },
   card: {
+    flex: 5,
     borderRadius: 2,
-    height: "425px",
-    width: "500px",
+    height: 425,
+    width: 500,
     // boxShadow: "0 3px 6px #999, 0 3px 6px #999",
     textAlign: "left",
     // float: "left",
     position: "relative",
-    marginBottom: "20%",
-    marginTop: "1%",
-    marginLeft: "7.5%",
-    marginRight: "5%"
+    // marginBottom: "20%",
+    // marginTop: "1%",
+    // marginLeft: "7.5%",
+    // marginRight: "5%",
+    backgroundColor: "rgb(255 , 250, 250)"
   },
   imgContainer: {
     // backgroundColor: "transparent",
     height: "60%",
     overflow: "hidden",
-    textAlign: "center"
+    textAlign: "center",
+    borderColor: "rgb(0 , 0, 0)",
+    borderWidth: 1,
+    borderStyle: "solid"
+
   },
   userPhotoLoaded : {
     width: "20%" , 
     // float:"left", 
-    marginLeft:"8.2%"
+    // marginLeft:"8.2%"
   },
   contentCard : {
-    fontSize : 16
+    fontSize : 16,
+    borderColor: "rgb(0 , 0, 0)",
+    borderWidth: 1,
+    borderStyle: "solid"
   },
   cardImage : {
     width: "60%"

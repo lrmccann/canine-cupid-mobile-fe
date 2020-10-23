@@ -10,13 +10,14 @@ import UserContext from "../utils/UserContext"
 // import {NavbarSignUp}from "../components/Navbar";
 // import  CheckBox   from '@react-native-community/checkbox';
 import Header from "../components/Header";
-import { Text, TextInput, View, StyleSheet, ScrollView, Button, Alert } from "react-native";
+import { Text, TextInput, View, StyleSheet, ScrollView, Button, Alert  } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigation } from '@react-navigation/native';
+import { CheckBox } from 'react-native-elements'
 
 
 export default function Signup() {
-  // const [toggleCheckBox, setToggleCheckBox] = useState(false)
+  const [toggleCheckBox, setToggleCheckBox] = useState(false)
   const { getData, getAllUsersNames } = useContext(UserContext)
   const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
   const { control, handleSubmit, getValues, setValue, register } = useForm();
@@ -44,8 +45,8 @@ export default function Signup() {
 
   const onsubmit = async data => {
          navigation.navigate('profile')
-    // let formValid = formFrontendValidations();
-    // if (formValid === true) {
+    let formValid = formFrontendValidations();
+    if (formValid === true) {
     await API.saveUser({
       password: data.password,
       userData: {
@@ -66,12 +67,12 @@ export default function Signup() {
         info: data.info
       }
     })
-      // }
       .then(res => handleSignupResponse(res))
       .catch(error => console.log(error.response))
 
     // console.log('Form Data' , data );
   }
+}
 
   const getAllNames = async  (sessionToken, arrYes ) => {
     console.log("getAllNames")
@@ -118,23 +119,26 @@ export default function Signup() {
       navigation.navigate('profile')
     };
   };
-  // function formFrontendValidations() { 
-  //   let validEmailFormat = validEmailRegex.test(formObject.email)
-  //   let userNameValid = 'userName' in formObject && (formObject.userName.length > 4 && formObject.userName.length < 21)
-  //   let passwordValid = 'password' in formObject && (formObject.password.length > 4 && formObject.password.length < 21)
-  //   let emailValid = 'email' in formObject && formObject.email.length > 0 && validEmailFormat
-  //   let petNameValid = 'petName' in formObject && formObject.petName.length > 0    
-  //   console.log("valids", userNameValid, passwordValid, emailValid, petNameValid) 
-  //   let fieldsValid = userNameValid && passwordValid && emailValid && petNameValid
-  //   if (!fieldsValid) {
-  //     let errorMsg = "Please fill ALL the required fields correctly i.e. Username (5-20 characters) , Password (5-20 Characters) , Email (in valid @format) and Petname (required)";
-  //     // showModal(errorMsg);
-  //     return false
-  //   }
-  //   else {
-  //     return true
-  //   };
-  // };
+  const formFrontendValidations  = async => { 
+    let newVal = getValues();
+    console.log(newVal , "loooook at meeee")
+    // console.log(control , " i be the control thang")
+    let validEmailFormat = validEmailRegex.test(newVal.email)
+    let userNameValid =(newVal.userName.length > 4 && newVal.userName.length < 21)
+    let passwordValid = (newVal.password.length > 4 && newVal.password.length < 21)
+    let emailValid = (newVal.email.length > 0 && validEmailFormat)
+    let petNameValid =  newVal.petName.length > 0    
+    console.log("valids", userNameValid, passwordValid, emailValid, petNameValid) 
+    let fieldsValid = userNameValid && passwordValid && emailValid && petNameValid
+    if (!fieldsValid) {
+      let errorMsg = "Please fill ALL the required fields correctly i.e. Username (5-20 characters) , Password (5-20 Characters) , Email (in valid @format) and Petname (required)";
+      // showModal(errorMsg);
+      return false
+    }
+    else {
+      return true
+    };
+  };
   return (
     <ScrollView >
       <View style={styles.signupCont}>
@@ -318,14 +322,32 @@ export default function Signup() {
                   onChange(value)
                 } />}
           />
-          {/* <CheckBox
-            disabled={false}
-            value={toggleCheckBox}
-            onValueChange={(newValue) => setToggleCheckBox(newValue)}
+          <View style={{flexDirection: "row"}}>
+          <Text>Frisbee</Text>
+          <CheckBox
+          value={toggleCheckBox}
+          onValueChange={(newValue) => setToggleCheckBox(newValue)}
           name="frisbee"
           checked={checkFrisbee}
           onChange={(event) => setCheckFrisbee(event.target.checked)}
-          /> */}
+          />
+          <Text>Playing in the park :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+          <CheckBox
+            value={toggleCheckBox}
+            onValueChange={(newValue) => setToggleCheckBox(newValue)}
+            name="park"
+            checked={checkPark}
+            onChange={(event) => setCheckPark(event.target.checked)}
+          />
+          <Text>Playing with a ball :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+          <CheckBox
+            value={toggleCheckBox}
+            onValueChange={(newValue) => setToggleCheckBox(newValue)}
+            name="ball"
+            checked={checkBall}
+            onChange={(event) => setCheckBall(event.target.checked)}
+          />
+          </View>
           <Text>More info</Text>
           <Controller
             name="info"

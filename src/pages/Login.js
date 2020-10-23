@@ -5,7 +5,7 @@ import  API  from "../utils/API";
 import  UserContext  from "../utils/UserContext";
 // import { Col, Row, Container } from "../components/Grid";
 // import { Input } from "../components/Form";
-import { LoginButton, SignupButton } from "../components/Button";
+import { AboutUsButton, LoginButton, SignupButton } from "../components/Button";
 // import { ModalButton} from "../components/Button";
 // import {NavbarNolinks} from '../components/Navbar';
 import Header from "../components/Header";
@@ -13,8 +13,10 @@ import Header from "../components/Header";
 // import LoginText from "./images/login-text.png";
 import { Button, Text, TextInput, View, ViewComponent, StyleSheet, TouchableHighlight, Image , Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
-import { useNavigation } from '@react-navigation/native';
-
+import { NavigationRouteContext, useNavigation } from '@react-navigation/native';
+import { NavigationContext } from '@react-navigation/native';
+import TabBar from "../Navigation/TabBar";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function Login(props) {
   // const [loginObject, setLoginObject] = useState({})
@@ -26,11 +28,12 @@ export default function Login(props) {
   const passwordInputRef = React.useRef();
   const navigation = useNavigation()
 
-
   // function handleInputChange(event) {
   //   const { name, value } = event.target;
   //   setLoginObject({ ...loginObject, [name]: value })
   // };
+  console.log(navigation)
+
 
   const handleLoginSubmit = async data => {
     // event.preventDefault();
@@ -100,9 +103,10 @@ export default function Login(props) {
 
 
   return (
+    <ScrollView>
   <View style={styles.mainCont}>
     <View style={styles.headerCont}>
-      <Header />
+      {/* <Header /> */}
     </View>
     <View style={styles.userNameCont} >
       <Text style={styles.loginText}>Username</Text>
@@ -151,15 +155,20 @@ export default function Login(props) {
         onPress={handleSubmit(handleLoginSubmit)}
       />
       <SignupButton />
+      <AboutUsButton />
     </View>
+    {/* <TabBar /> */}
   </View>
+  </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   mainCont: {
     backgroundColor: "rgb(232, 86, 86)",
-    height: "100%"
+    height: 1000,
+    // minHeight : 1000,
+    // minWidth: 1000
   },
   headerCont: {
     flex: 2,

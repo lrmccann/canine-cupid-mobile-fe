@@ -3,13 +3,15 @@ import { Col, Row, Container } from "../components/Grid";
 import {NavbarAboutUs} from '../components/Navbar';
 import Header from "../components/Header";
 import { Text , View , StyleSheet } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 export default function aboutUs() {
         return(
+            <ScrollView>
             <View style={styles.aboutUsPageContent}>
-                <Header />
-                <NavbarAboutUs/>
+                {/* <Header /> */}
+                {/* <NavbarAboutUs/> */}
                 <Container>
                 <Row>
                     <Col size="lg-12">
@@ -28,26 +30,25 @@ export default function aboutUs() {
                   </Text>
                     </View>
                     </Col>
-
                 </Row>
-
                 </Container>
-
             </View>
+            </ScrollView>
     )}
 
     const styles = StyleSheet.create({
         aboutUsPageContent: {
-            backgroundColor:"rgb(232, 86, 86)"
+            backgroundColor:"rgb(232, 86, 86)",
+            height: 1500
         },
         aboutUsText : {
             fontSize: 22, 
             padding: "2%" ,
-            fontFamily: 'Karla sans-serif Poppins sans-serif Quicksand sans-serif'
+            // fontFamily: 'Karla sans-serif Poppins sans-serif Quicksand sans-serif'
         },
         aboutUsMainCont : {
             marginLeft:"5%", 
-            height: "470px",
+            height: 580,
              width: "90%", 
             //  border: "solid black 1px", 
              backgroundColor: "white", 
