@@ -4,7 +4,8 @@ import Col from "../Col";
 import Modal from 'react-bootstrap/Modal';
 import Map from "../map";
 import UserContext from "../../utils/UserContext";
-import { View , Image, TextInput, Text , StyleSheet , Button } from 'react-native';
+import { View , Image, TextInput, Text , StyleSheet , Button, Alert } from 'react-native';
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 
 
@@ -40,9 +41,10 @@ export default function MatchCards(props) {
     } if (!isLoading) {
         async function showuserDetails(id) {
             setIsOpen(true);
-            console.log(id)
+            console.log(p , "these are p ")
             const index = userForMatchesPage.findIndex(p => p.userData.userName === id)
             setThisUser(userForMatchesPage[index].userData)
+            
 
             // console.log(props.arrayData.map((item, userName , key) => (
             // key={...item.userName},
@@ -78,7 +80,7 @@ export default function MatchCards(props) {
                 </Modal> */}
                 {props.arrayData.map((item, myKey) => (
                     <View key={myKey}>
-                        {console.log(myKey)}
+                        {console.log(item.userData.userName)}
                         {/* {console.log(item.userData.userName)} */}
                         {/* <Row> */}
                         <View style={{flexDirection: "row", width:"100%"}}>
@@ -89,7 +91,11 @@ export default function MatchCards(props) {
                                             <Image style={styles.img}  source={item.userData.petPhotoUrl} alt={item.userData.userName} />
                                             <View>
                                                 {/* <Text style={{fontSize : "10.72px"}}> */}
-                                                    <Button title="click" id={item.userData.userName} style={styles.userNameBtn} onClick={(e) => (showuserDetails(e.target.id))}>{item.userData.userName}</Button>
+                                                    <TouchableWithoutFeedback
+                                                     id={item.userData.userName} style={styles.userNameBtn} 
+                                                     onPress={(e) => (showuserDetails(e.item.userName))}>
+                                                         <Text>{item.userData.userName}</Text>
+                                                         </TouchableWithoutFeedback>
                                                 {/* </Text> */}
                                             </View>
                                         </View>
@@ -102,7 +108,7 @@ export default function MatchCards(props) {
                                     </Col>
                                     <Col size="md-3 ">
                                     <View style={styles.messageBtn} >
-                                            <View style={{ borderTopRightRadius: 15, borderBottomRightRadius: 15, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} type="submit" className="btn" href={item.userData.email}><Text className="btnText" style={{ fontFamily: "Arial", fontWeight: "bolder" }}>Message Now</Text></View>
+                                            <View style={{ borderTopRightRadius: 15, borderBottomRightRadius: 15, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} type="submit" className="btn" href={item.userData.email}><Text className="btnText" style={{ fontFamily: "Arial", fontWeight: "bold" }}>Message Now</Text></View>
                                         </View>
                                     </Col>
                             </View>

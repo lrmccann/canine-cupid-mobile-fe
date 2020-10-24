@@ -17,7 +17,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist" : {
+        "NSPhotoLibraryAddUsageDescription" : "This app uses the camera roll of the user's iphone to select photos from camera roll",
+        "permissions" : ["CAMERA" , "ACCESS_FINE_LOCATION" , "USE_FINGERPRINT"]
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

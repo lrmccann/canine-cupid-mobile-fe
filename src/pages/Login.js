@@ -11,12 +11,13 @@ import { AboutUsButton, LoginButton, SignupButton } from "../components/Button";
 import Header from "../components/Header";
 // import DogLogin from "./images/dog-for-login.png";
 // import LoginText from "./images/login-text.png";
-import { Button, Text, TextInput, View, ViewComponent, StyleSheet, TouchableHighlight, Image , Alert } from "react-native";
+import { Button, Text, TextInput, View, ViewComponent, StyleSheet, Image , Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { NavigationRouteContext, useNavigation } from '@react-navigation/native';
 import { NavigationContext } from '@react-navigation/native';
 import TabBar from "../Navigation/TabBar";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView , TouchableHighlight } from "react-native-gesture-handler";
+import * as Application from 'expo-application';
 
 export default function Login(props) {
   // const [loginObject, setLoginObject] = useState({})
@@ -27,6 +28,8 @@ export default function Login(props) {
   const userNameInputRef = React.useRef();
   const passwordInputRef = React.useRef();
   const navigation = useNavigation()
+
+  console.log(Application.applicationId)
 
   // function handleInputChange(event) {
   //   const { name, value } = event.target;
@@ -103,13 +106,17 @@ export default function Login(props) {
 
 
   return (
-    <ScrollView>
+    <ScrollView
+    showsVerticalScrollIndicator ={false}
+    showsHorizontalScrollIndicator={false}
+    >
   <View style={styles.mainCont}>
     <View style={styles.headerCont}>
+      <Text style={styles.ccHeader}>Canine Cupid</Text>
       {/* <Header /> */}
     </View>
     <View style={styles.userNameCont} >
-      <Text style={styles.loginText}>Username</Text>
+      {/* <Text style={styles.loginText}>Username</Text> */}
       <Controller
       name="userName"
       defaultValue="none"
@@ -122,14 +129,13 @@ export default function Login(props) {
       style={styles.TextInputStuff}
         onBlur={onBlur}
         ref={userNameInputRef}
-        placeholder="8 - 20 characters"
+        placeholder="Username"
         onChangeText={value =>
         onChange(value)
         }
       />}
     />
-      
-      <Text style={styles.loginText}>Password</Text>
+      {/* <Text style={styles.loginText}>Password</Text> */}
       <Controller
       name="password"
       defaultValue="none"
@@ -142,38 +148,46 @@ export default function Login(props) {
       style={styles.TextInputStuffTwo}
       onBlur={onBlur}
       ref={passwordInputRef}
-        placeholder="8 - 20 characters"
+        placeholder="Password"
         onChangeText={value => 
         onChange(value)
         }
         />}
       />
     </View>
-    <View style={styles.loginBtn}>
-      <LoginButton
-        // disabled={!(data.userName && data.password)}
-        onPress={handleSubmit(handleLoginSubmit)}
-      />
-      <SignupButton />
-      <AboutUsButton />
-    </View>
-    {/* <TabBar /> */}
-  </View>
-  </ScrollView>
+        <View style={styles.loginBtn}>
+          <LoginButton
+            // disabled={!(data.userName && data.password)}
+            onPress={handleSubmit(handleLoginSubmit)}
+          />
+          <View style={styles.signUpBtn}>
+            <SignupButton />
+          </View>
+          {/* <AboutUsButton /> */}
+        </View>
+        {/* <TabBar /> */}
+      </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   mainCont: {
-    backgroundColor: "rgb(232, 86, 86)",
-    height: 1000,
+    // backgroundColor: "rgb(232, 86, 86)",
+    height: 820,
     // minHeight : 1000,
     // minWidth: 1000
   },
-  headerCont: {
-    flex: 2,
-    height: "50%",
-    width: "100%"
+  // headerCont: {
+  //   flex: 4,
+  //   height: "50%",
+  //   width: "100%"
+  // },
+  ccHeader : {
+    fontSize : 50,
+    alignSelf : "center",
+    marginTop : 50,
+    marginBottom : 70
   },
   userNameCont: {
     flex: 3
@@ -186,31 +200,42 @@ const styles = StyleSheet.create({
     backgroundColor: "rgb(80, 86, 86)"
   },
   TextInputStuff: {
-    backgroundColor: "rgb(255 , 250, 250)",
-    width: "70%",
-    height: "8%",
+    // backgroundColor: "rgb(255 , 250, 250)",
+    width: "80%",
+    height: "15%",
     borderRadius: 3,
     marginLeft: 50,
+    marginTop : -10,
+    borderTopColor : "transparent",
+    borderLeftColor : "transparent",
+    borderRightColor : "transparent",
+    borderBottomColor : "rgb( 0 , 0 , 0 )",
+    borderBottomWidth : 2,
+    fontSize : 20
     // marginTop: -80
   },
   TextInputStuffTwo: {
-    backgroundColor: "rgb(255 , 250, 250)",
-    width: "70%",
-    height: "8%",
+    // backgroundColor: "rgb(255 , 250, 250)",
+    width: "80%",
+    height: "15%",
     borderRadius: 3,
     marginLeft: 50,
+    marginTop: 55, 
+    borderTopColor : "transparent",
+    borderLeftColor : "transparent",
+    borderRightColor : "transparent",
+    borderBottomColor : "rgb( 0 , 0 , 0 )",
+    borderBottomWidth : 2, 
+    fontSize : 20,
     // marginTop: -80
   },
   loginBtn: {
     color: "rgb( 0 , 0 ,0)",
     height: "20%",
   },
-  loginText: {
-    fontSize: 18,
-    marginBottom: 10,
-    marginLeft: 50,
-    marginTop: 20
-  }
+  // signUpBtn : {
+  //   flexDirection : "column"
+  // }
 })
 
 // export default function Login() {

@@ -10,17 +10,17 @@ import API from "../utils/API";
 import UserContext from "../utils/UserContext"
 // import Moment from 'react-moment';
 import FlashMessage from "react-flash-message";
-import { StyleSheet, Text, View , Image , Button , ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, ScrollView } from 'react-native';
 // import Swipeable from 'react-native-swipeable';
-import { TouchableHighlight } from "react-native-gesture-handler";
+import { TouchableHighlight , TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 
-export default function Matchnow () {
-    
+export default function Matchnow() {
+
     const { user, allUsersNames, newUserData } = useContext(UserContext)
     console.log("newUserData", newUserData);
 
-     ////////////// Code for Modal //////
+    ////////////// Code for Modal //////
     const [isOpen, setIsOpen] = React.useState(false);
     const [isErrorMessage, setIsErrorMessage] = React.useState();
     const showModal = (errorMsg) => {
@@ -30,24 +30,24 @@ export default function Matchnow () {
     const hideModal = () => {
         setIsOpen(false);
     };
-     ///////////////////////////////////
+    ///////////////////////////////////
 
     const [matchedYesNames, setMatchedYesName] = useState(user.matchesYes)
-    console.log("matchedYesName",matchedYesNames);
+    console.log("matchedYesName", matchedYesNames);
 
     const [matchedNoNames, setMatchedNoName] = useState(user.matchesNo)
-    console.log("matchedNoName",matchedNoNames);
+    console.log("matchedNoName", matchedNoNames);
 
-    const [nextUserData, setNextUserData] = useState (newUserData);
+    const [nextUserData, setNextUserData] = useState(newUserData);
 
-    const [allNames, setAllNames] = useState (allUsersNames);
+    const [allNames, setAllNames] = useState(allUsersNames);
 
     const [status, setStatus] = useState(false);
 
     const [status2, setStatus2] = useState(false);
 
     // let readableDate = <Moment format="YYYY/MM/DD">{nextUserData.date}</Moment>;
-    
+
     let vaccinated = "";
     let trained = "";
 
@@ -72,15 +72,15 @@ export default function Matchnow () {
     // };
     //exluder of matched Yes names from allUsersNames array 
     const filteredNamesYes = function () {
-        const arr = allUsersNames.filter(e=>matchedYesNames.findIndex(i=>i === e) === -1);
+        const arr = allUsersNames.filter(e => matchedYesNames.findIndex(i => i === e) === -1);
         return arr;
-    };   
+    };
     //filtered array
     const cuttedArray1 = filteredNamesYes();
-    
+
     // exluder of matched No names from allUsersNames array 
     const filteredNamesNo = function () {
-        const arr = cuttedArray1.filter(e=>matchedNoNames.findIndex(i=>i === e) === -1);
+        const arr = cuttedArray1.filter(e => matchedNoNames.findIndex(i => i === e) === -1);
         return arr;
     };
 
@@ -88,49 +88,49 @@ export default function Matchnow () {
 
     //picking of random name from filtered array
     const next = cuttedArrey2[0];
-    console.log("next",next, cuttedArrey2);
+    console.log("next", next, cuttedArrey2);
 
     //getter of next user data 
-    async function getNewUser (name){   
+    async function getNewUser(name) {
         await API.getUserByName(name)
-        .then(response => {
-            setNextUserData(response.data);
-        })
+            .then(response => {
+                setNextUserData(response.data);
+            })
     };
     //setter of a matched Yes name in to array of loged users data
-    async function setNewMatchesYes (name1, name2){
+    async function setNewMatchesYes(name1, name2) {
         await API.setUsersYesMatches(name1, name2)
-        .then((response) => {
-            console.log("setNewMatches",response);
-            setStatus(false);
-        })
+            .then((response) => {
+                console.log("setNewMatches", response);
+                setStatus(false);
+            })
     };
     //setter of a matched No name in to array of loged users data
-    async function setNewMatchesNo (name1, name2){
+    async function setNewMatchesNo(name1, name2) {
         await API.setUsersNoMatches(name1, name2)
-        .then((response) => {
-            console.log("setNewMatches",response);
-            setStatus2(false);
-        })
+            .then((response) => {
+                console.log("setNewMatches", response);
+                setStatus2(false);
+            })
     };
 
     const userForArr = nextUserData.userName;
-    console.log ("userForArr", userForArr)
+    console.log("userForArr", userForArr)
 
     const getNextUser = function () {
         // const next1 = next;
-        
+
         // if (matchedYesNames.includes(next)){
         //     console.log ("UserAlreadyMatched")
 
         // } else 
-      
-   
+
+
         // if (next.localeCompare(newUserName)){
         //     console.log ("getNextUser", next)
         getNewUser(next)
         // getNewUserName(next)
-            
+
         // } else if (next.localeCompare(newUserName)){
         //     console.log ("getNextUser - SAME1")
         //     getNewUser(next)
@@ -139,9 +139,9 @@ export default function Matchnow () {
         //     console.log ("getNextUser - SAME2")
         // };
     };
-    
+
     //deleting user's name from allUsersNames array  
-    const cutedArrOfAllUsersNames = function (){
+    const cutedArrOfAllUsersNames = function () {
         const arr1 = allUsersNames;
         // function checkUserName(name) {
         //     if (name !== nextUserData.userName) {
@@ -150,20 +150,20 @@ export default function Matchnow () {
         //   }
         // const arr2 = arr1.filter(checkUserName)
         const arr2 = arr1.shift()
-        console.log ("cutedArrOfAllUsersNames", arr1, nextUserData.userName);
+        console.log("cutedArrOfAllUsersNames", arr1, nextUserData.userName);
         console.log(arr2)
         setAllNames(arr1)
     }
 
     function handleYesSubmit() {
         console.log("Yes");
-        if(allNames.length>0){ 
-           cutedArrOfAllUsersNames();
+        if (allNames.length > 0) {
+            cutedArrOfAllUsersNames();
 
             setStatus(true);
             setNewMatchesYes(user.userName, nextUserData.userName);
-            setMatchedYesName(matchedYesNames=> [...matchedYesNames, userForArr]);
-            getNextUser(); 
+            setMatchedYesName(matchedYesNames => [...matchedYesNames, userForArr]);
+            getNextUser();
         } else {
             showModal("You've already reviewed all available users, please check your Matches.")
         };
@@ -171,11 +171,11 @@ export default function Matchnow () {
 
     function handleNoSubmit() {
         console.log("No")
-        if(allNames.length>0){ 
+        if (allNames.length > 0) {
             cutedArrOfAllUsersNames();
             setStatus2(true);
             setNewMatchesNo(user.userName, nextUserData.userName);
-            setMatchedNoName(matchedNoNames=> [...matchedNoNames, userForArr]);
+            setMatchedNoName(matchedNoNames => [...matchedNoNames, userForArr]);
             getNextUser()
         } else {
             showModal("You've already reviewed all available users, please check your Matches.")
@@ -183,83 +183,84 @@ export default function Matchnow () {
     };
 
     return (
-        <ScrollView >
-        {/* <View>  */}
+        <ScrollView
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+        >
+            {/* <View>  */}
             {/* <Navbar /> */}
-            <View style={{ backgroundColor: "rgb(232, 86, 86)", textAlign: "center", width: "100%", height: 1200, paddingTop: "2%", fontFamily: "Georgia, serif" }}>
-                <Text style={{ fontSize : 20 , color: "white" }}>Get yo pup the lovin they deserve and match now!</Text>
+            {/* <View style={{ 
+                // backgroundColor: "rgb(232, 86, 86)",
+             textAlign: "center", width: "100%", height: 900, paddingTop: "2%", fontFamily: "Georgia, serif" }}> */}
+            <Text style={{ fontSize: 20, color: "black" }}>Get yo pup the lovin they deserve and match now!</Text>
             <View style={styles.matchNowCont}>
-                <View style={{flexDirection : "row"}}>
-                    <Col size="md-3">
-                        <TouchableHighlight 
+                <View style={{ flexDirection: "row" }}>
+                    <TouchableHighlight
                         style={styles.swipeable}
                         // title="idkfive"
-                            // size="lg"
-                            // variant="danger"
-                            // direction="left"
-                            onPress={handleNoSubmit}
-                        ><Text>Swipe no</Text></TouchableHighlight>
-                         {/* {status2 && (
+                        // size="lg"
+                        // variant="danger"
+                        // direction="left"
+                        onPress={handleNoSubmit}
+                    ><Text>Swipe no</Text></TouchableHighlight>
+                    {/* {status2 && (
                             <FlashMessage duration={10000} >
                                <Text style={{backgroundColor:"rgb(232, 86, 86)", fontSize:25, fontColor: "white", fontFamily: "Georgia, serif" , fontWeight: "bolder"}}>REJECTED!</Text>
                             </FlashMessage>
                         )} */}
-                    </Col>
                     <View style={styles.card}>
-                    <Col size="md-6">
-                        <CardTwo petName={nextUserData.petName} breed={nextUserData.breed} 
-                        age ={nextUserData.age} userName={newUserData.userName} email={nextUserData.email}
-                        city={newUserData.city}
-                        img1={nextUserData.petPhotoUrl} img2={nextUserData.userPhotoUrl} 
-                        message={"User Pic"} messageTwo={"Dog Pic"}>
-                            <View style={{float:"left" ,width:"50%"}}>
-                            <Text style={{ paddingTop: "10%", paddingLeft: "4%" }}>Pet name:  &nbsp;&nbsp;{nextUserData.petName}</Text>
-                            <Text style={{ paddingTop: "12%", paddingLeft: "4%" }}>Breed:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{nextUserData.breed}</Text>
-                            <Text  style={{ paddingTop: "12%", paddingLeft: "4%" }}>Age:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{nextUserData.age}</Text>
+                        <CardTwo petName={nextUserData.petName} breed={nextUserData.breed}
+                            age={nextUserData.age} userName={newUserData.userName} email={nextUserData.email}
+                            city={newUserData.city}
+                            img1={nextUserData.petPhotoUrl} img2={nextUserData.userPhotoUrl}
+                            message={"User Pic"} messageTwo={"Dog Pic"}>
+                            <View style={{ float: "left", width: "50%" }}>
+                                <Text style={{ paddingTop: "10%", paddingLeft: "4%" }}>Pet name:  &nbsp;&nbsp;{nextUserData.petName}</Text>
+                                <Text style={{ paddingTop: "12%", paddingLeft: "4%" }}>Breed:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{nextUserData.breed}</Text>
+                                <Text style={{ paddingTop: "12%", paddingLeft: "4%" }}>Age:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{nextUserData.age}</Text>
                             </View>
-                            <View style={{float: "left" ,width:"50%" }}>
-                            {/* <View style={{marginTop:"12%", marginLeft: "5%" , fontSize:"25px"  }}><Text>Vaccinated: {vaccinated}</Text></View> */}
-                            {/* <View style={{ marginTop: "12%", marginLeft: "5%" , fontSize:"25px" }}><Text>Trained: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{trained}</Text></View> */}
+                            <View style={{ float: "left", width: "50%" }}>
+                                {/* <View style={{marginTop:"12%", marginLeft: "5%" , fontSize:"25px"  }}><Text>Vaccinated: {vaccinated}</Text></View> */}
+                                {/* <View style={{ marginTop: "12%", marginLeft: "5%" , fontSize:"25px" }}><Text>Trained: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{trained}</Text></View> */}
                             </View>
                         </CardTwo>
-                    </Col>
                     </View>
-
-                    <Col size="md-3">
-                        <TouchableHighlight
+                        <View>
+                    <TouchableWithoutFeedback
                         style={styles.swipeableTwo}
                         // title="idkfour"
-                            // size="lg"
-                            // variant="success"
-                            // direction="right"
-                            onPress={handleYesSubmit}
-                        >
-                            <Text>Swipe yes</Text>
-                        </TouchableHighlight>
-                        {/* {status && (
+                        // size="lg"
+                        // variant="success"
+                        // direction="right"
+                        // onPress={handleYesSubmit}
+                        onPress={handleYesSubmit}
+                    >
+
+                        {/* <Text>Swipe yes</Text> */}
+                    </TouchableWithoutFeedback>
+                    </View>
+                    {/* {status && (
                             <FlashMessage duration={500000} >
                                <Text style={{ fontWeight:"bolder" ,backgroundColor:"rgb(232, 86, 86)", fontSize:25, fontColor: "white", fontFamily: "Georgia, serif"}}>MATCHED!</Text>
                             </FlashMessage>
                         )} */}
-    
-                    </Col>
                 </View>
-            </View>
-            <View fluid>
-                <View style={{flexDirection : "row"}}>
-                    <Col size="md-10">
-                        <View >
-                        <ProfDetails>
-                        
-                             <Text>Username:&nbsp;{nextUserData.userName}</Text> 
-                             
-                        <View style={{paddingTop: "3%"}}><Text>Location:&nbsp;&nbsp;&nbsp;&nbsp;<Text>{nextUserData.city}</Text></Text></View>
-                        <View style={{paddingTop: "3%" }}><Text>Zip Code:&nbsp;&nbsp;&nbsp;<Text>{nextUserData.zipCode}</Text></Text></View>
-                        {/* <View style={{paddingTop: "3%" }}><Text>Join Date:&nbsp;&nbsp;{readableDate}</Text></View> */}
-                        <View style={{paddingTop: "3%"}}><Text>About my pet:&nbsp;&nbsp;<Text>{nextUserData.info}</Text></Text></View>
-                        </ProfDetails>
+                <View style={{ position: "absolute", marginTop: 500 }} >
+                    {/* <View style={{flexDirection : "row"}}> */}
+                    {/* <View style={{flexDirection : "column"}}> */}
+                    <ProfDetails>
+                        <View>
+                        <View style={{ paddingTop: "4%", marginLeft: "2.5%" }}><Text style={{ fontWeight: "bold", fontSize: 18 }}>Username :&nbsp;{nextUserData.userName} </Text></View>
+                        <View style={{ paddingTop: "6%", marginLeft: "2.5%" }}><Text style={{ fontWeight: "bold", fontSize: 18 }}>Location: &nbsp;{nextUserData.city}</Text></View>
+                        <View style={{ paddingTop: "6%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 18}}>Zip Code: &nbsp;{nextUserData.zipCode} </Text></View>
+                        <View style={{ paddingTop: "6%", marginLeft: "2.5%" }}><Text style={{ fontWeight: "bold", fontSize: 18 }}>Interests: &nbsp;{nextUserData.interests}</Text></View>
+                        <View style={{ paddingTop: "6%", marginLeft: "2.5%" }}><Text style={{ fontWeight: "bold", fontSize: 18 }}>More about my pet: &nbsp;{nextUserData.info}</Text></View>
                         </View>
-                    </Col>
+                    </ProfDetails>
+                    {/* </View> */}
+                    {/* <View style={{paddingTop: "3%" }}><Text>Join Date:&nbsp;&nbsp;{readableDate}</Text></View> */}
+                    {/* </Col> */}
+                    {/* </View> */}
                 </View>
             </View>
             {/* ----------------------Rendering Modal */}
@@ -275,46 +276,47 @@ export default function Matchnow () {
                 </Modal.Footer>
             </Modal> */}
             {/* ------------------------------------ */}
-        {/* </View> */}
-        </View>
+            {/* </View> */}
+            {/* </View> */}
         </ScrollView>
     );
 }
 const styles = StyleSheet.create({
     myModal: {
         // backgroundImage: url("./images/dog-world-2.png"),
-        backgroundColor:"rgb(232, 86, 86)",
+        backgroundColor: "rgb(232, 86, 86)",
         // background-blend-mode: hard-light;
         // height: 378
     },
     matchNowCont: {
         // flex: 20,
-        backgroundColor: "rgb(232, 86, 86)",
-        height: 1200
+        // backgroundColor: "rgb(232, 86, 86)",
+        height: 900
     },
     swipeable: {
         // flex: 10,
-        // activeOpacity: 0.6,
+        opacity: 0.1,
         backgroundColor: "rgb(100, 100 , 100 )",
         // float: "right",
-        height : "40%",
+        height: 480,
         width: 30,
         // zIndex: 100,
-        position: "relative",
-        alignSelf: "flex-start"
+        position: "absolute",
+        flexDirection: "column"
     },
-    swipeableTwo : {
+    swipeableTwo: {
         backgroundColor: "rgb(200, 200 , 200 )",
-        // float: "right",
-        height : "40%",
+        height: 480,
         width: 30,
         // zIndex: 1,
-        position: "relative",
+        // position: "absolute",
         // marginLeft: "50%",
-        alignSelf: "flex-end"
+        marginLeft: 385,
+        opacity: 0.1
     },
     card: {
-        flex: 5,
-        alignSelf : "center"
+        alignSelf: "center",
+        position : "absolute",
+        top : -35
     }
-  });
+});

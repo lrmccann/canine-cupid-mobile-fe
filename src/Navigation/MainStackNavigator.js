@@ -20,6 +20,7 @@ import { View } from "react-native";
 import {Navbar} from "../components/Navbar";
 import TabBar from "./TabBar";
 import routes from "../../app.json";
+import { color } from "react-native-reanimated";
 // import {
 //     AboutUsScreen,
 //     EditProfileScreen,
@@ -151,34 +152,63 @@ useEffect( () => {
       getAllMatchesForMatchesPage,
       getCurrentUserIpAddressForContext
     }}>
-    <NavigationContainer >
+    <NavigationContainer style={styles.navheader} >
     {/* <Navbar /> */}
     {/* <View> */}
-      <Stack.Navigator initialRouteName="home" style={styles.header}>
+      <Stack.Navigator initialRouteName="Login" style={styles.header}>
         <Stack.Screen
          name='aboutUs'
           component={AboutUs}
           options={{
-          // headerShown : false
+          headerStyle : {
+            backgroundColor : "rgb(232, 86, 86)"
+          }
           }} />
         <Stack.Screen
-         name='home' 
+         name='Login' 
          component={Login}
          options={{
-          //  title :"Login"
+           headerStyle : {
+             backgroundColor : "rgb(232, 86, 86)"
+           },
+           headerTitleStyle : {
+             fontSize : 22,
+             marginBottom : 10,
+             marginRight: 320,
+             color: "white"
+           }
         //  headerShown: false
          }}/>
         <Stack.Screen
          name='signup' 
          component={Signup}
          options={{
-          //  title :"signup"
+           headerStyle : {
+             backgroundColor : "rgb(232, 86, 86)"
+           },
+           headerTitleStyle : {
+            fontSize : 22,
+            marginBottom : 10,
+            // marginRight: 320,
+            color: "white"
+          }
+
           //  headerShown:false
          }} />
         <Stack.Screen 
         name='profile' 
         component={Profile}
         options={{
+          headerStyle : {
+            backgroundColor : "rgb(232, 86, 86)"
+          },
+          headerTitleStyle : {            
+            fontSize : 22,
+            marginBottom : 10,
+            // marginRight: 320,
+            color: "white"
+
+          }
           // headerShown:false
         }} />
         <Stack.Screen 
@@ -192,6 +222,15 @@ useEffect( () => {
         component={Matchnow}
         options={{
           // headerShown:false
+          headerStyle : {
+            backgroundColor : "rgb(232, 86, 86)"
+          },
+          headerTitleStyle : {            
+            fontSize : 22,
+            marginBottom : 10,
+            // marginRight: 320,
+            color: "white"
+          }
         }} />
         <Stack.Screen 
         name='matches' 
@@ -208,6 +247,21 @@ useEffect( () => {
   )
 }
 
+const styles = StyleSheet.create({
+  navheader : {
+    backgroundColor : "rgb(232, 86, 86)"
+  },
+    header: {
+    backgroundColor: "rgb(0 , 0 , 0)"
+  },
+  bottomNav: {
+    height: 100,
+    backgroundColor: "black",
+    width :"100%"
+
+  }
+
+ })
 
 //  const BottomTabNav = () => {
 //   const Screens = createBottomTabNavigator()
@@ -339,18 +393,3 @@ useEffect( () => {
 //   }
 // )
 // export default createAppContainer(BottomTabNav)
-
-
-
-
-const styles = StyleSheet.create({
-  header: {
-    backgroundColor: "rgb(0 , 0 , 0)"
-  },
-  bottomNav: {
-    height: 100,
-    backgroundColor: "black",
-    width :"100%"
-
-  }
-})

@@ -10,10 +10,24 @@ import UserContext from "../utils/UserContext"
 // import {NavbarSignUp}from "../components/Navbar";
 // import  CheckBox   from '@react-native-community/checkbox';
 import Header from "../components/Header";
-import { Text, TextInput, View, StyleSheet, ScrollView, Button, Alert  } from "react-native";
+import { Text, TextInput, View, StyleSheet, ScrollView, Button, Alert , Platform   } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from 'react-native-elements'
+import { TouchableHighlight , TouchableWithoutFeedback } from "react-native-gesture-handler";
+// import ImagePickerExample from "../components/ImageSelector/ImagePicker";
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import firebase from "firebase/app";
+import 'firebase/storage';
+// var config = {
+//   apiKey : AIzaSyDA4b2aSJHC3pQ9QgXN69s9IQGGRy4mEh4 ,
+//   authDomain :   ,
+//   databaseURL : "https://canine-cupid-img-storage.firebaseio.com"  ,
+//   projectId: "canine-cupid-img-storage" ,
+//   storageBucket : "/userPhotos" ,
+//   messagingSenderId : 
+// }
 
 
 export default function Signup() {
@@ -41,10 +55,54 @@ export default function Signup() {
   const [checkPark, setCheckPark] = useState(false)
   const [checkBall, setCheckBall] = useState(false)
   const [checkFrisbee, setCheckFrisbee] = useState(false)
+  const [checkPupCup , setCheckPupCup] = useState(false)
+// const for imagePicker   just checking if this works
+  const [image, setImage] = useState(null);
+  const [imageTwo, setImageTwo] = useState(null);
 
+useEffect(() => {
+  (async () => {
+    if (Platform.OS !== 'web') {
+      const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+  })();
+}, []);
+
+const pickImage = async () => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
+
+  console.log(result);
+
+  if (!result.cancelled) {
+    setImage(result.uri);
+  }
+};
+const pickImageTwo = async () => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
+
+  console.log(result);
+
+  if (!result.cancelled) {
+    setImageTwo(result.uri);
+  }
+};
 
   const onsubmit = async data => {
-         navigation.navigate('profile')
+    console.log(data)
+    navigation.navigate('profile')
     let formValid = formFrontendValidations();
     if (formValid === true) {
     await API.saveUser({
@@ -62,8 +120,8 @@ export default function Signup() {
         // vaccinated: checkVaccinated,
         // trained: checkTrained,
         email: data.email,
-        petPhotoUrl: data.petPhotoUrl,
-        userPhotoUrl: data.userPhotoUrl,
+        petPhotoUrl: imageTwo,
+        userPhotoUrl: image,
         info: data.info
       }
     })
@@ -140,13 +198,22 @@ export default function Signup() {
     };
   };
   return (
-    <ScrollView >
+    <ScrollView
+    showsVerticalScrollIndicator ={false}
+    showsHorizontalScrollIndicator={false}
+    >
+      {/* <ImagePickerExample /> */}
       <View style={styles.signupCont}>
         {/* <View style={styles.header}> */}
-        <Header />
-        <Text style={{ fontSize: 30 }}>User Info</Text>
+        {/* <Header /> */}
+        <Text style={styles.signUpHeader}>Sign Up</Text>
+        <View style={{marginBottom : 20 , backgroundColor: "rgb(232, 86, 86)" , width : "98%"  , height : 60 , borderRadius: 10 , marginLeft : 4 }}>
+        {/* <View style={{ borderTopColor : "transparent", borderLeftColor : "transparent", borderRightColor : "transparent", borderBottomColor : "rgb( 0 , 0 , 0 )", borderBottomWidth : 2, width : "40%"}}> */}
+        <Text style={{ fontSize: 30 , color : "white" , textAlign : "center" , paddingTop : 10 }}>User Info</Text>
+        {/* </View> */}
+        </View>
         <View style={styles.userInfo}>
-          <Text>Username</Text>
+          <Text style={styles.categoryText}>Username</Text>
           <Controller
             name="userName"
             defaultValue=""
@@ -164,7 +231,7 @@ export default function Signup() {
                 }
               />}
           />
-          <Text>Password</Text>
+          <Text style={styles.categoryText}>Password</Text>
           <Controller
             name="password"
             defaultValue=""
@@ -181,7 +248,7 @@ export default function Signup() {
                   onChange(value)
                 } />}
           />
-          <Text>User photo url</Text>
+          <Text style={styles.categoryText}>User photo</Text>
           <Controller
             name="userPhotoUrl"
             defaultValue=""
@@ -189,16 +256,28 @@ export default function Signup() {
             onFocus={() => {
               userPhotoUrlInputRef.current.focus()
             }}
-            render={({ onChange, onBlur, value }) =>
-              <TextInput
-                onBlur={onBlur}
-                ref={userPhotoUrlInputRef}
-                style={styles.userInfoInput}
-                onChangeText={value =>
-                  onChange(value)
-                } />}
+            render={({onBlur , value}) => 
+            <View style={styles.slctPhotoBtn}>
+                  <TouchableWithoutFeedback
+                  onBlur={onBlur}
+                    ref={userPhotoUrlInputRef}
+                    onPress={pickImage}
+                  >
+                    <Text style={{fontSize : 15 , color : "white"}}>Select from Iphone</Text>
+                  </TouchableWithoutFeedback>
+              </View>
+                    }
+            // render={({ onChange, onBlur, value }) =>
+            //   <TextInput
+            //     onBlur={onBlur}
+            //     ref={userPhotoUrlInputRef}
+            //     style={styles.userInfoInput}
+            //     onChangeText={value =>
+            //       onChange(value)
+            //     }
+            //      />}
           />
-          <Text>Email</Text>
+          <Text style={styles.categoryText}>Email</Text>
           <Controller
             name="email"
             defaultValue=""
@@ -215,7 +294,7 @@ export default function Signup() {
                   onChange(value)
                 } />}
           />
-          <Text>City</Text>
+          <Text style={styles.categoryText}>City</Text>
           <Controller
             name="city"
             defaultValue=""
@@ -233,7 +312,7 @@ export default function Signup() {
                 }
               />}
           />
-          <Text>Zipcode</Text>
+          <Text style={styles.categoryText}>Zipcode</Text>
           <Controller
             name="zipcode"
             defaultValue=""
@@ -251,9 +330,11 @@ export default function Signup() {
                 } />}
           />
         </View>
-        <Text style={{ fontSize: 30, marginTop: "15%" }}>Pet Info</Text>
+        <View style={{marginTop : 20 , marginBottom : 30  ,backgroundColor: "rgb(232, 86, 86)" , width : "98%"  , height : 60 , borderRadius : 10 , marginLeft : 4 }} >
+        <Text style={{ fontSize: 30 , color:"white" , textAlign : "center" , paddingTop : 10 }}>Pet Info</Text>
+        </View>
         <View style={styles.petInfo}>
-          <Text>Pet Name</Text>
+          <Text style={styles.categoryText}>Pet Name</Text>
           <Controller
             name="petName"
             defaultValue=""
@@ -271,7 +352,7 @@ export default function Signup() {
                 }
               />}
           />
-          <Text>Breed</Text>
+          <Text style={styles.categoryText}>Breed</Text>
           <Controller
             name="breed"
             defaultValue=""
@@ -288,7 +369,7 @@ export default function Signup() {
                   onChange(value)
                 } />}
           />
-          <Text>Pet age</Text>
+          <Text style={styles.categoryText}>Pet age</Text>
           <Controller
             name="age"
             defaultValue=""
@@ -305,7 +386,7 @@ export default function Signup() {
                   onChange(value)
                 } />}
           />
-          <Text>Pet photo url</Text>
+          <Text style={styles.categoryText}>Pet photo</Text>
           <Controller
             name="petPhotoUrl"
             defaultValue=""
@@ -313,17 +394,31 @@ export default function Signup() {
             onFocus={() => {
               petPhotoUrlInputRef.current.focus()
             }}
-            render={({ onChange, onBlur, value }) =>
-              <TextInput
-                onBlur={onBlur}
-                ref={petPhotoUrlInputRef}
-                style={styles.userInfoInput}
-                onChangeText={value =>
-                  onChange(value)
-                } />}
+            render={({onBlur, value}) => 
+            <View style={styles.slctPhotoBtn}>
+                  <TouchableWithoutFeedback
+                  onBlur={onBlur}
+                    ref={petPhotoUrlInputRef}
+                    onPress={pickImageTwo}
+                  >
+                    <Text style={{fontSize : 15 , color : "white"}}>Select from Iphone</Text>
+                  </TouchableWithoutFeedback>
+              </View>
+                    }
+            // render={({ onChange, onBlur, value }) =>
+            //   <TextInput
+            //     onBlur={onBlur}
+            //     ref={petPhotoUrlInputRef}
+            //     style={styles.userInfoInput}
+            //     onChangeText={value =>
+            //       onChange(value)
+            //     } 
+            //     />}
           />
-          <View style={{flexDirection: "row"}}>
-          <Text>Frisbee</Text>
+          <Text style={styles.categoryText}>Interests</Text>
+          <View style={{flexDirection: "row" , flexWrap : "wrap" , justifyContent : "space-evenly" , marginTop : 20}}>
+            <View style={{flexDirection : "column" , right : 31}}>
+          <Text style={{fontWeight : "bold"}}>Frisbee :</Text>
           <CheckBox
           value={toggleCheckBox}
           onValueChange={(newValue) => setToggleCheckBox(newValue)}
@@ -331,15 +426,29 @@ export default function Signup() {
           checked={checkFrisbee}
           onChange={(event) => setCheckFrisbee(event.target.checked)}
           />
-          <Text>Playing in the park :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+          </View>
+          <View style={{flexDirection : "column"}}>
+          <Text style={{fontWeight : "bold"}}>Playing in the park :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
           <CheckBox
             value={toggleCheckBox}
             onValueChange={(newValue) => setToggleCheckBox(newValue)}
             name="park"
             checked={checkPark}
             onChange={(event) => setCheckPark(event.target.checked)}
+            
           />
-          <Text>Playing with a ball :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+          <View style={{flexDirection : "column" , right : 140}}>
+          <Text style={{fontWeight : "bold"}} >Pup Cups :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+          <CheckBox
+            value={toggleCheckBox}
+            onValueChange={(newValue) => setToggleCheckBox(newValue)}
+            name="pupCup"
+            checked={checkBall}
+            onChange={(event) => setCheckPupCup(event.target.checked)}
+          />
+          </View>
+          <View style={{flexDirection : "column" , bottom : 70}}>
+          <Text style={{fontWeight : "bold"}} >Playing with a ball :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
           <CheckBox
             value={toggleCheckBox}
             onValueChange={(newValue) => setToggleCheckBox(newValue)}
@@ -348,8 +457,20 @@ export default function Signup() {
             onChange={(event) => setCheckBall(event.target.checked)}
           />
           </View>
-          <Text>More info</Text>
-          <Controller
+          </View>
+          {/* <View style={{flexDirection : "column"}}>
+          <Text style={{fontWeight : "bold"}} >Playing with a ball :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+          <CheckBox
+            value={toggleCheckBox}
+            onValueChange={(newValue) => setToggleCheckBox(newValue)}
+            name="ball"
+            checked={checkBall}
+            onChange={(event) => setCheckBall(event.target.checked)}
+          />
+          </View> */}
+          </View>
+          <Text style={styles.categoryTextTwo}>More info</Text>
+          <Controller 
             name="info"
             defaultValue=""
             control={control}
@@ -366,11 +487,13 @@ export default function Signup() {
                 } />}
           />
         </View>
-        <Button title="Sign Up"
+        <TouchableWithoutFeedback style={styles.signUpBtn}
           // onPress={handleSubmit(handleFormSubmit)
           onPress={handleSubmit(onsubmit)
           }
-        ></Button>
+        >
+          <Text style={styles.signUpBtnText}>Sign Up</Text>
+        </TouchableWithoutFeedback>
       </View>
     </ScrollView>
   )
@@ -380,8 +503,14 @@ const styles = StyleSheet.create({
     flex: 1
   },
   signupCont: {
-    backgroundColor: "rgb(232, 86, 86)",
-    height: 1200
+    // backgroundColor: "rgb(232, 86, 86)",
+    height: 1500
+  },
+  signUpHeader : {
+    fontSize : 50, 
+    alignSelf : "center",
+    marginTop : 25,
+    marginBottom : 35
   },
   headerCont: {
     flex: 1,
@@ -390,17 +519,63 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     flex: 10,
-    marginLeft: "15%"
+    marginLeft: "15%",
+    marginBottom : -200
 
   },
+  slctPhotoBtn : {
+    backgroundColor : "rgb(232, 86, 86)",
+    height : 32,
+    width : 145,
+    // borderColor : "black",
+    borderRadius : 8,
+    // borderStyle : "solid",
+    // borderWidth : 1,
+    marginLeft : 60,
+    padding : 5,
+    marginTop : 8, 
+    marginBottom : 15
+   },
+  categoryText : { 
+    fontSize :16.5,
+    marginBottom : 9,
+    fontWeight : "bold"
+  },
+  categoryTextTwo : {
+    fontSize :16.5,
+    marginBottom : 9,
+    fontWeight : "bold",
+    marginTop : -50
+  },
   userInfoInput: {
-    backgroundColor: "rgb(255, 250 , 250)",
+    // backgroundColor: "rgb(255, 250 , 250)",
     width: "75%",
     marginBottom: "5%",
+    borderTopColor : "transparent",
+    borderLeftColor : "transparent",
+    borderRightColor : "transparent",
+    borderBottomColor : "rgb( 0 , 0 , 0 )",
+    borderBottomWidth : 2,
+    fontSize : 20
   },
   petInfo: {
     flex: 10,
     marginLeft: "15%"
+  },
+  signUpBtn : {
+    flexDirection: "row",
+    backgroundColor : "rgb(232, 86, 86)",
+    width : "80%",
+    borderRadius : 35,
+    height : 65,
+    justifyContent : "center",
+    marginBottom : 40,
+    marginLeft : 42.5,
+    paddingTop : 12.5
+  },
+  signUpBtnText : {
+    fontSize : 30, 
+    color: "rgb( 255 , 250 ,250)"
   }
 })
 

@@ -1,9 +1,10 @@
-import React, { useState , useContext } from "react";
+import React, { useState , useContext  } from "react";
 import Col from "../Col";
-import { StyleSheet, Text, View , Image, Button } from 'react-native';
+import { StyleSheet, Text, View , Image, Button , Platform } from 'react-native';
 import UserContext from "../../utils/UserContext";
 import "../../assets/images/man-for-test.jpeg";
 import "../../assets/images/corgi-for-test.png";
+import * as ImagePicker from 'expo-image-picker';
 
 
 export default function Card(props) {
@@ -13,7 +14,8 @@ export default function Card(props) {
   const [userPhotoLoaded, setUserPhotoLoaded] = useState(false)
   const [petPhotoLoaded, setPetPhotoLoaded] = useState(true)
   const { user } = useContext(UserContext)
-  console.log(props)
+ 
+
   function switchPictures(){
     // if(props.img2 === undefined){
     //   setUserPhotoLoaded(false)
@@ -37,7 +39,6 @@ export default function Card(props) {
   if(petPhotoLoaded === true){
     return (
       <View style={styles.someMargin}>
-      <Col size="md-6">
         <View style={styles.switchPicBtnDiv}>
           <View style={styles.altswitchPicBtn} >
           <Button title="User Photo" onPress={switchPictures}>
@@ -47,7 +48,10 @@ export default function Card(props) {
         <View style={styles.card}>
           <View style={styles.imgContainer}>
             <Image style={styles.cardImage}
-            alt={props.petName} source={photoOne}
+            alt={props.petName} source={{
+              uri : user.setUserPhotoUrl.uri
+              
+              }}
             // src={props.petPhotoUrl} 
             />
           </View>
@@ -57,7 +61,6 @@ export default function Card(props) {
            <Text style={{fontSize:20 , fontWeight:"bold"}}> City: {user.city} </Text>
           </View>
         </View>
-      </Col>
       </View>
     );
   } if(userPhotoLoaded === true){
@@ -91,6 +94,7 @@ const styles = StyleSheet.create ({
   someMargin: {
     alignContent:"center",
     marginTop: "5%"
+    
   },
   switchPicBtnDiv: {
     // height : 50,
@@ -135,7 +139,8 @@ const styles = StyleSheet.create ({
     borderTopColor: "rgb(0 , 0, 0)",
     backgroundColor: "rgb( 250, 250 , 250)", // black
     // marginLeft: 12
-    marginLeft : "7.5%"
+    marginLeft : "7.5%",
+
   },
   imgContainer: {
     backgroundColor: "rgb(255 , 250, 250 )", // gray
@@ -158,9 +163,12 @@ const styles = StyleSheet.create ({
     borderStyle: "solid",
     borderWidth: 1,
     borderTopColor: "rgb(0 , 0, 0)",
+    borderLeftColor : "transparent",
+    borderRightColor : "transparent",
+    borderBottomColor : "transparent",
     backgroundColor: "rgb( 250, 250 , 250)", // black,
     height: "40%",
-    justifyContent:"space-around"
+    justifyContent:"space-around",
   },
   cardImage : {
     width: "60%"
