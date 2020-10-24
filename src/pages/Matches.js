@@ -37,7 +37,10 @@ useEffect(()=>{
   }
   if(!isLoading){
     return (
-      <ScrollView>
+      <ScrollView
+      showsVerticalScrollIndicator ={false}
+      showsHorizontalScrollIndicator={false}
+      >
       <View style={{backgroundColor : "rgb(232, 86, 86)" , height: 1300}}>
         {/* <Navbar /> */}
         <View style={{ backgroundColor:"rgb(232, 86, 86)" , width:"100%" ,  height:70 , paddingTop:"2%"  , borderRadius : "25px" , marginLeft:"9%" , marginBottom:"3%" , fontFamily: "Georgia, serif"}}>
@@ -51,7 +54,7 @@ useEffect(()=>{
               <MatchCards
                 arrayData={finalUser}
                 message={<Text> sent you a message, reply now!</Text>}
-                image="https://cdn.iconscout.com/icon/free/png-256/user-avatar-contact-portfolio-personal-portrait-profile-6-5623.png"
+                // image="https://cdn.iconscout.com/icon/free/png-256/user-avatar-contact-portfolio-personal-portrait-profile-6-5623.png"
                 // {...MessageButton}
               >
                       {/* <Map height="200px" width="200px"/> */}

@@ -6,6 +6,7 @@ import UserContext from "../../utils/UserContext";
 import { Text, View , Image , Button , StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import  AsyncStorage  from '@react-native-community/async-storage';
+import { ScrollView, TouchableHighlight, TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 export function MatchButton(props) {
     return ( 
@@ -76,11 +77,12 @@ export function LoginButton( props) {
     }
     return (
         <View style={styles.LoginButton}>
-        <Button title=" Log In"
+        <TouchableWithoutFeedback
         // onPress={handleClick} 
         onPress={props.onPress}
         >
-        </Button>
+            <Text style={styles.loginText}>Login</Text>
+        </TouchableWithoutFeedback>
         </View>
     );
 }
@@ -109,9 +111,11 @@ export function SignupButton(props) {
         }
         return (
             <View style={styles.Signuphome}>
-            <Button title="Sign up"
+                <Text style={{fontSize: 17.5 , color : "black"}}>Don't have an account?</Text>
+            <TouchableWithoutFeedback
             onPress={handleClick} >
-            </Button>
+                <Text style={{marginLeft: 61, marginTop : 5 , fontSize : 15 , fontWeight : "bold" , color : "blue"}} >Register</Text>
+            </TouchableWithoutFeedback>
             </View>
         );
 }
@@ -158,13 +162,13 @@ export function EditProfileButton() {
     }
     return (
         <View style={styles.editProfile}>
-        <Button style={{marginLeft:"25%"}}
-            onPress={handleClick}
-            title="Edit" >
+        <TouchableWithoutFeedback 
+            onPress={handleClick}>
+                <Text style={{flexWrap : "wrap" , color : "white" , fontSize : 15 , paddingTop : 5 , paddingLeft : 3  }}>Edit Profile</Text>
                 {/* <Text style={styles.editBtn}>
              Edit Profile 
             </Text> */}
-        </Button>
+        </TouchableWithoutFeedback>
         </View>
     );
 }
@@ -241,17 +245,12 @@ export function MatchNowButton() {
     };
 
     return (
-        <View>
-        <View>
-            <View>
-            <Button title="Matchnow"
+        <View style={styles.matchNowBtn}>
+            <TouchableWithoutFeedback
             // className="btn" 
             onPress={()=>handleClick()} >
-                <Text style={styles.btnLogin}>
-                     Match Now 
-            </Text>
-            </Button>
-            </View>
+                <Text style={styles.matchNowText}> Match Now </Text>
+            </TouchableWithoutFeedback>
             {/* ----------------------Rendering Modal */}
             {/* <View style={styles.myModal}>
             <Modal show={isOpen} onHide={hideModal}>
@@ -274,7 +273,6 @@ export function MatchNowButton() {
             </View> */}
             {/* ------------------------------------ */}
         </View>
-        </View>
     );
 }
 
@@ -295,15 +293,12 @@ export function MatchesButton() {
         .then(navigation.navigate('matches'))
     }
     return (
-        <View style={styles.btn}>
-    <Button 
-    title="Matches"
+        <View style={styles.matchesBtn}>
+    <TouchableWithoutFeedback
     // className="btn" 
     onPress={handleClick} >
-        <Text style={styles.btnLogin}>
-       Matches
-      </Text>
-    </Button>
+        <Text style={styles.matchesBtnText}> Matches </Text>
+    </TouchableWithoutFeedback>
     </View>
     );
 }
@@ -353,7 +348,18 @@ const styles = StyleSheet.create({
     //     backgroundColor: "rgb(227, 227, 230)"
     // },
     LoginButton : {
-        flexDirection: "row"
+        flexDirection: "row",
+        backgroundColor : "white",
+        width : "80%",
+        borderRadius : 35,
+        height : 65,
+        justifyContent : "center",
+        marginTop : -210,
+        marginLeft : 42.5
+    },
+    loginText : {
+        fontSize : 25,
+        padding : 17
     },
     messagebutton: {
         height: 73,
@@ -362,13 +368,13 @@ const styles = StyleSheet.create({
     },
     editProfile: {
         height: 45,
-        width: 80,
-        fontSize:10,
+        width: 100,
+        padding : 8,
         // border: "1px solid black",
         // float: "right",
         // marginTop: "8%",
         // fontWeight: "bold",
-        backgroundColor: "rgb(210, 210  , 210 )",
+        backgroundColor: "rgb(232, 86, 86)",
         borderTopLeftRadius : 25, 
         borderTopRightRadius : 25, 
         borderBottomLeftRadius: 25,
@@ -401,16 +407,33 @@ const styles = StyleSheet.create({
         // whiteSpace: "nowrap"
     },
     signUpButton:{
-        height:40,
+        height:50,
         width:130,
         // border:"1px solid black",
         // float:"right",
         fontSize:20,
         marginRight:".2%",
-        marginTop:".28%",
+        marginTop:"10%",
         // fontWeight:"bold",
         color:"black",
         backgroundColor:"white",
+    },
+    matchesBtn : {
+        flexDirection : "row-reverse",
+        marginTop : 10
+    },
+    matchesBtnText : {
+        fontSize : 20,
+        color : "blue"
+    },
+    matchNowBtn : {
+        flexDirection : "row",
+        // marginTop : -23.5, 
+        marginLeft : 8
+    },
+    matchNowText : {
+        fontSize : 20,
+        color : "blue"
     },
     HomeButton: {
         height:40,
@@ -425,7 +448,10 @@ const styles = StyleSheet.create({
         backgroundColor:"white"
     },
     Signuphome : {
-        flexDirection: "row"
+        flexDirection: "column",
+        marginTop: 20,
+        marginLeft : 118
+
     },
     abtUs: {
         height:40,

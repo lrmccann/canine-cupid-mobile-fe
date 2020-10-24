@@ -37,7 +37,6 @@ export default function Card(props) {
   if(petPhotoLoaded === true){
     return (
       <View style={styles.someMargin}>
-      <Col size="md-6">
         <View style={styles.switchPicBtnDiv}>
           <View style={styles.altswitchPicBtn} >
           <Button title="User Photo" onPress={switchPictures}>
@@ -57,7 +56,6 @@ export default function Card(props) {
            <Text style={{fontSize:20 , fontWeight:"bold"}}> City: {user.city} </Text>
           </View>
         </View>
-      </Col>
       </View>
     );
   } if(userPhotoLoaded === true){
@@ -158,6 +156,9 @@ const styles = StyleSheet.create ({
     borderStyle: "solid",
     borderWidth: 1,
     borderTopColor: "rgb(0 , 0, 0)",
+    borderLeftColor : "transparent",
+    borderRightColor : "transparent",
+    borderBottomColor : "transparent",
     backgroundColor: "rgb( 250, 250 , 250)", // black,
     height: "40%",
     justifyContent:"space-around"

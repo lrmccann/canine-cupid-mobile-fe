@@ -1,12 +1,12 @@
 import React  from "react";
 import { Text, View , StyleSheet } from "react-native";
+import { EditProfileButton } from "../Button";
 import Col from "../Col";
 
 
 export default function ProfDetails(props) {
     return (
         <View style={styles.profContainer}>
-            <Col size="md-12">
                 <View style={styles.profDetails}>
                     <View style={styles.profContent}>
                         <Text style={styles.profText}>Profile Details</Text>
@@ -19,7 +19,6 @@ export default function ProfDetails(props) {
                         {/* </h4> */}
                     </View>
                 </View>
-            </Col>
         </View>
     )
 
@@ -27,39 +26,43 @@ export default function ProfDetails(props) {
 
 const styles = StyleSheet.create({
     profContainer: {
+        // position : "absolute",
         // justifyContent:"center",
-        marginTop : "8%",
-        height: 900,
-        marginLeft: "15%"
+        top : 40,
+        height: 400,
+        marginLeft: "8%",
     },
     profDetails : {
         // border: "solid 1px black",
         padding: 5,
-        height: 225,
+        height: 270,
         backgroundColor: "white",
         /* width:100%; */
         // marginLeft: "25%",
         // float: "left",
-        width: "80%",
-        flexWrap: "nowrap",
+        width: 350,
+        borderTopColor : "rgb(0 , 0 , 0)",
+        borderStyle: "solid",
+        borderWidth: 1,
+        // flexWrap: "wrap",
         // marginLeft: "65%",
         /* margin:auto; */
     },
     profContent : {
-        padding: "1.75%",
+        // padding: "1.75%",
         color:"black",
-        // fontWeight: "bolder"
     },
     profText : {
         textAlign: "center",
-        marginBottom: "2.5%"
+        marginBottom: "2.5%",
+        fontWeight : "bold",
+        fontSize : 20
     },
     line : {
         // border: "solid black 1px", 
         marginBottom : "2%"
     },
     contentOne : {
-        fontSize : 10,
         flexDirection : "column"
     }
 });

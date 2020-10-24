@@ -21,7 +21,10 @@ export default function Profile () {
       const [newUser , setNewUser] = useState({})
 
 return(
-  <ScrollView>
+  <ScrollView
+  showsVerticalScrollIndicator ={false}
+  showsHorizontalScrollIndicator={false}
+  >
 <View style={styles.profileCont}>
     <View style={styles.headerCont}>
 <Header />
@@ -37,13 +40,15 @@ age={user.age}
 />
 {/* <Image style={styles.card} source={require('./images/dog-for-login.png')} /> */}
 <ProfDetails>
-      <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text>User Name : {user.userName} </Text></View>
-      <View style={{ paddingTop: "4%" , marginLeft: "2.5%" }}><Text>Location: &nbsp;&nbsp;&nbsp;&nbsp;{user.city}</Text></View>
-      <View style={{ paddingTop: "4%" , marginLeft: "2.5%" }}><Text> Zip Code: &nbsp;&nbsp;&nbsp;&nbsp;{user.zipCode} </Text></View>
-      <View style={{ paddingTop: "4%", marginLeft: "2.5%"}}><Text>Interests: &nbsp;{user.interests}</Text></View>
-      <View style={{ paddingTop: "4%" , marginLeft: "2.5%" }}><Text>More about my pet: &nbsp;&nbsp;{user.info}</Text></View>
-      <View style={{ paddingTop: "4%" , marginLeft: "2.5%" }}><Text>Join Date: &nbsp;&nbsp;&nbsp;{user.readableDate}</Text></View>
+      <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>Username :&nbsp;{user.userName} </Text></View>
+      <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>Location: &nbsp;{user.city}</Text></View>
+      <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>Zip Code: &nbsp;{user.zipCode} </Text></View>
+      <View style={{ paddingTop: "2%", marginLeft: "2.5%"}}><Text style={{fontWeight : "bold" , fontSize : 15}}>Interests: &nbsp;{user.interests}</Text></View>
+      <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>More about my pet: &nbsp;{user.info}</Text></View>
+      {/* <View style={{ paddingTop: "4%" , marginLeft: "2.5%" }}><Text>Join Date: &nbsp;&nbsp;&nbsp;{user.readableDate}</Text></View> */}
+      <View style={{paddingLeft : 233 , paddingTop : 15 }}>
       <EditProfileButton />
+      </View>
       </ProfDetails>
 
 
@@ -57,7 +62,7 @@ age={user.age}
 }
 const styles = StyleSheet.create({
     profileCont: {
-      backgroundColor : "rgb(232, 86, 86)",
+      // backgroundColor : "rgb(232, 86, 86)",
       height: "100%",
       width:"100%",
       // justifyContent:"center"

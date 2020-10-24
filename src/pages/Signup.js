@@ -14,6 +14,7 @@ import { Text, TextInput, View, StyleSheet, ScrollView, Button, Alert  } from "r
 import { useForm, Controller } from "react-hook-form";
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from 'react-native-elements'
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 
 export default function Signup() {
@@ -140,13 +141,21 @@ export default function Signup() {
     };
   };
   return (
-    <ScrollView >
+    <ScrollView
+    showsVerticalScrollIndicator ={false}
+    showsHorizontalScrollIndicator={false}
+    >
       <View style={styles.signupCont}>
         {/* <View style={styles.header}> */}
-        <Header />
-        <Text style={{ fontSize: 30 }}>User Info</Text>
+        {/* <Header /> */}
+        <Text style={styles.signUpHeader}>Sign Up</Text>
+        <View style={{marginBottom : 20 , backgroundColor: "rgb(232, 86, 86)" , width : "98%"  , height : 60 , borderRadius: 10 , marginLeft : 4 }}>
+        {/* <View style={{ borderTopColor : "transparent", borderLeftColor : "transparent", borderRightColor : "transparent", borderBottomColor : "rgb( 0 , 0 , 0 )", borderBottomWidth : 2, width : "40%"}}> */}
+        <Text style={{ fontSize: 30 , color : "white" , textAlign : "center" , paddingTop : 10 }}>User Info</Text>
+        {/* </View> */}
+        </View>
         <View style={styles.userInfo}>
-          <Text>Username</Text>
+          <Text style={styles.categoryText}>Username</Text>
           <Controller
             name="userName"
             defaultValue=""
@@ -164,7 +173,7 @@ export default function Signup() {
                 }
               />}
           />
-          <Text>Password</Text>
+          <Text style={styles.categoryText}>Password</Text>
           <Controller
             name="password"
             defaultValue=""
@@ -181,7 +190,7 @@ export default function Signup() {
                   onChange(value)
                 } />}
           />
-          <Text>User photo url</Text>
+          <Text style={styles.categoryText}>User photo url</Text>
           <Controller
             name="userPhotoUrl"
             defaultValue=""
@@ -198,7 +207,7 @@ export default function Signup() {
                   onChange(value)
                 } />}
           />
-          <Text>Email</Text>
+          <Text style={styles.categoryText}>Email</Text>
           <Controller
             name="email"
             defaultValue=""
@@ -215,7 +224,7 @@ export default function Signup() {
                   onChange(value)
                 } />}
           />
-          <Text>City</Text>
+          <Text style={styles.categoryText}>City</Text>
           <Controller
             name="city"
             defaultValue=""
@@ -233,7 +242,7 @@ export default function Signup() {
                 }
               />}
           />
-          <Text>Zipcode</Text>
+          <Text style={styles.categoryText}>Zipcode</Text>
           <Controller
             name="zipcode"
             defaultValue=""
@@ -251,9 +260,11 @@ export default function Signup() {
                 } />}
           />
         </View>
-        <Text style={{ fontSize: 30, marginTop: "15%" }}>Pet Info</Text>
+        <View style={{marginTop : 20 , marginBottom : 30  ,backgroundColor: "rgb(232, 86, 86)" , width : "98%"  , height : 60 , borderRadius : 10 , marginLeft : 4 }} >
+        <Text style={{ fontSize: 30 , color:"white" , textAlign : "center" , paddingTop : 10 }}>Pet Info</Text>
+        </View>
         <View style={styles.petInfo}>
-          <Text>Pet Name</Text>
+          <Text style={styles.categoryText}>Pet Name</Text>
           <Controller
             name="petName"
             defaultValue=""
@@ -271,7 +282,7 @@ export default function Signup() {
                 }
               />}
           />
-          <Text>Breed</Text>
+          <Text style={styles.categoryText}>Breed</Text>
           <Controller
             name="breed"
             defaultValue=""
@@ -288,7 +299,7 @@ export default function Signup() {
                   onChange(value)
                 } />}
           />
-          <Text>Pet age</Text>
+          <Text style={styles.categoryText}>Pet age</Text>
           <Controller
             name="age"
             defaultValue=""
@@ -305,7 +316,7 @@ export default function Signup() {
                   onChange(value)
                 } />}
           />
-          <Text>Pet photo url</Text>
+          <Text style={styles.categoryText}>Pet photo url</Text>
           <Controller
             name="petPhotoUrl"
             defaultValue=""
@@ -322,8 +333,9 @@ export default function Signup() {
                   onChange(value)
                 } />}
           />
-          <View style={{flexDirection: "row"}}>
-          <Text>Frisbee</Text>
+          <View style={{flexDirection: "row" , flexWrap : "wrap" , justifyContent : "space-around"}}>
+            <View style={{flexDirection : "column"}}>
+          <Text style={{fontWeight : "bold"}}>Frisbee :</Text>
           <CheckBox
           value={toggleCheckBox}
           onValueChange={(newValue) => setToggleCheckBox(newValue)}
@@ -331,7 +343,9 @@ export default function Signup() {
           checked={checkFrisbee}
           onChange={(event) => setCheckFrisbee(event.target.checked)}
           />
-          <Text>Playing in the park :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+          </View>
+          <View style={{flexDirection : "column"}}>
+          <Text style={{fontWeight : "bold"}}>Playing in the park :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
           <CheckBox
             value={toggleCheckBox}
             onValueChange={(newValue) => setToggleCheckBox(newValue)}
@@ -339,7 +353,9 @@ export default function Signup() {
             checked={checkPark}
             onChange={(event) => setCheckPark(event.target.checked)}
           />
-          <Text>Playing with a ball :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+          </View>
+          <View style={{flexDirection : "column"}}>
+          <Text style={{fontWeight : "bold"}} >Playing with a ball :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
           <CheckBox
             value={toggleCheckBox}
             onValueChange={(newValue) => setToggleCheckBox(newValue)}
@@ -348,8 +364,9 @@ export default function Signup() {
             onChange={(event) => setCheckBall(event.target.checked)}
           />
           </View>
-          <Text>More info</Text>
-          <Controller
+          </View>
+          <Text style={styles.categoryText}>More info</Text>
+          <Controller 
             name="info"
             defaultValue=""
             control={control}
@@ -366,11 +383,13 @@ export default function Signup() {
                 } />}
           />
         </View>
-        <Button title="Sign Up"
+        <TouchableHighlight style={styles.signUpBtn}
           // onPress={handleSubmit(handleFormSubmit)
           onPress={handleSubmit(onsubmit)
           }
-        ></Button>
+        >
+          <Text style={styles.signUpBtnText}>Sign Up</Text>
+        </TouchableHighlight>
       </View>
     </ScrollView>
   )
@@ -380,8 +399,14 @@ const styles = StyleSheet.create({
     flex: 1
   },
   signupCont: {
-    backgroundColor: "rgb(232, 86, 86)",
-    height: 1200
+    // backgroundColor: "rgb(232, 86, 86)",
+    height: 1500
+  },
+  signUpHeader : {
+    fontSize : 50, 
+    alignSelf : "center",
+    marginTop : 25,
+    marginBottom : 35
   },
   headerCont: {
     flex: 1,
@@ -390,17 +415,44 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     flex: 10,
-    marginLeft: "15%"
+    marginLeft: "15%",
+    marginBottom : -200
 
   },
+  categoryText : { 
+    fontSize :16.5,
+    marginBottom : 9,
+    fontWeight : "bold"
+  },
   userInfoInput: {
-    backgroundColor: "rgb(255, 250 , 250)",
+    // backgroundColor: "rgb(255, 250 , 250)",
     width: "75%",
     marginBottom: "5%",
+    borderTopColor : "transparent",
+    borderLeftColor : "transparent",
+    borderRightColor : "transparent",
+    borderBottomColor : "rgb( 0 , 0 , 0 )",
+    borderBottomWidth : 2,
+    fontSize : 20
   },
   petInfo: {
     flex: 10,
     marginLeft: "15%"
+  },
+  signUpBtn : {
+    flexDirection: "row",
+    backgroundColor : "rgb(232, 86, 86)",
+    width : "80%",
+    borderRadius : 35,
+    height : 65,
+    justifyContent : "center",
+    marginBottom : 40,
+    marginLeft : 42.5,
+    paddingTop : 12.5
+  },
+  signUpBtnText : {
+    fontSize : 30, 
+    color: "rgb( 255 , 250 ,250)"
   }
 })
 

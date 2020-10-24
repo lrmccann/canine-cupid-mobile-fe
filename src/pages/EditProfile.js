@@ -92,7 +92,10 @@ export default function EditProfile() {
   };
 
   return (
-    <ScrollView >
+    <ScrollView
+    showsVerticalScrollIndicator ={false}
+    showsHorizontalScrollIndicator={false}
+    >
       <View style={styles.signupCont}>
         {/* <View style={styles.header}> */}
         <Text style={{fontSize : 65}}>EditProfile</Text>
