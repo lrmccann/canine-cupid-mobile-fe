@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { BaseRouter, NavigationContainer, NavigationRouteContext } from '@react-navigation/native';
 import { createStackNavigator ,  createSwitchNavigator } from '@react-navigation/stack';
 import { createAppContainer } from "react-navigation";
-  import {createBottomTabNavigator } from "react-navigation-tabs";
 import  AsyncStorage  from '@react-native-community/async-storage';
 import { UserProvider } from "../utils/UserContext";
 import { Text , StyleSheet } from "react-native";
@@ -16,11 +15,7 @@ import Matches from '../pages/Matches';
 import Matchnow from '../pages/Matchnow';
 import Signup from '../pages/Signup';
 import Profile from '../pages/Profile';
-import { View } from "react-native";
-import {Navbar} from "../components/Navbar";
-import TabBar from "./TabBar";
 import routes from "../../app.json";
-import { color } from "react-native-reanimated";
 // import {
 //     AboutUsScreen,
 //     EditProfileScreen,

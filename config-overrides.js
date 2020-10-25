@@ -1,14 +1,14 @@
-const {alias} = require('react-app-rewire-alias')
+// const {alias} = require('react-app-rewire-alias')
 
-module.exports = function override(config) {
-  alias({
-    '@components': './src/components',
-    '@assets' : './src/assets',
-    '@navigation' : './src/Navigation',
-    '@pages' : './src/pages',
-    '@screens' : './src/screens',
-    '@utils' : './src/utils'
-  })(config)
+// module.exports = function override(config) {
+//   alias({
+//     '@components': './src/components',
+//     '@assets' : './src/assets',
+//     '@navigation' : './src/Navigation',
+//     '@pages' : './src/pages',
+//     '@screens' : './src/screens',
+//     '@utils' : './src/utils'
+//   })(config)
 
-  return config
-}
+//   return config
+// }

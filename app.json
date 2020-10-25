@@ -18,55 +18,62 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "infoPlist" : {
-        "NSPhotoLibraryAddUsageDescription" : "This app uses the camera roll of the user's iphone to select photos from camera roll",
-        "permissions" : ["CAMERA" , "ACCESS_FINE_LOCATION" , "USE_FINGERPRINT"]
+      "infoPlist": {
+        "NSPhotoLibraryAddUsageDescription": "This app uses the camera roll of the user's iphone to select photos from camera roll",
+        "permissions": [
+          "CAMERA",
+          "ACCESS_FINE_LOCATION",
+          "USE_FINGERPRINT"
+        ]
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "just publishing so i can get my bundle id for firebase"
   },
   "routes": [
     {
       "component": "Login",
       "name": "home",
       "order": 1,
-      "label" : "Login"
+      "label": "Login"
     },
     {
       "component": "AboutUs",
       "name": "aboutUs",
       "order": 2,
-      "label" : "About Us"
+      "label": "About Us"
     },
     {
       "component": "EditProfile",
       "name": "editProfile",
       "order": 3,
-      "label" : "Edit Profile"
+      "label": "Edit Profile"
     },
     {
       "component": "Matches",
       "name": "matches",
       "order": 4,
-      "label" : "Matches"
+      "label": "Matches"
     },
     {
       "component": " MatchNow",
       "name": "matchnow",
       "order": 5,
-      "label" : "Match Now"
-    },     {
-      "component" : "Profile",
-      "name" : "profile",
-      "order" : 6,
-      "label" : "Profile"
-   },     {
-    "component" : "Signup",
-    "name" : "signup",
-    "order" : 7,
-    "label" : "Sign Up"
-  }
+      "label": "Match Now"
+    },
+    {
+      "component": "Profile",
+      "name": "profile",
+      "order": 6,
+      "label": "Profile"
+    },
+    {
+      "component": "Signup",
+      "name": "signup",
+      "order": 7,
+      "label": "Sign Up"
+    }
   ]
 }

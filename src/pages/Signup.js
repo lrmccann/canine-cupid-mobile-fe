@@ -26,7 +26,7 @@ import 'firebase/storage';
 //   databaseURL : "https://canine-cupid-img-storage.firebaseio.com"  ,
 //   projectId: "canine-cupid-img-storage" ,
 //   storageBucket : "/userPhotos" ,
-//   messagingSenderId : 
+//   messagingSenderId 677791653458 : 
 // }
 
 
