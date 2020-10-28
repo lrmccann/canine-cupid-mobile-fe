@@ -18,17 +18,8 @@ import { TouchableHighlight , TouchableWithoutFeedback } from "react-native-gest
 // import ImagePickerExample from "../components/ImageSelector/ImagePicker";
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
-import firebase from "firebase/app";
-import 'firebase/storage';
-// var config = {
-//   apiKey : AIzaSyDA4b2aSJHC3pQ9QgXN69s9IQGGRy4mEh4 ,
-//   authDomain :   ,
-//   databaseURL : "https://canine-cupid-img-storage.firebaseio.com"  ,
-//   projectId: "canine-cupid-img-storage" ,
-//   storageBucket : "/userPhotos" ,
-//   messagingSenderId 677791653458 : 
-// }
-
+import * as firebase from "firebase";
+import * as firebaseConfig from "../../firebase";
 
 export default function Signup() {
   const [toggleCheckBox, setToggleCheckBox] = useState(false)
@@ -56,9 +47,10 @@ export default function Signup() {
   const [checkBall, setCheckBall] = useState(false)
   const [checkFrisbee, setCheckFrisbee] = useState(false)
   const [checkPupCup , setCheckPupCup] = useState(false)
-// const for imagePicker   just checking if this works
-  const [image, setImage] = useState(null);
+// const for firebase
+  const [imageOne, setImage] = useState(null);
   const [imageTwo, setImageTwo] = useState(null);
+
 
 useEffect(() => {
   (async () => {
@@ -68,10 +60,32 @@ useEffect(() => {
         alert('Sorry, we need camera roll permissions to make this work!');
       }
     }
+    // console.log(storage)
   })();
 }, []);
 
-const pickImage = async () => {
+const pickImage = async data => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
+  if (!result.cancelled) {
+    // setImage(result.uri)
+    uploadImage(result.uri , "userPhoto" )
+    .catch((error) => {
+      console.log(error)
+    })
+    // .then(() =>{
+    //   Alert.alert("success")
+    // })
+    // .catch((error)=> {
+    //   Alert.alert(error);
+    // })
+  }
+};
+const pickImageTwo = async data => {
   let result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.All,
     allowsEditing: true,
@@ -79,26 +93,32 @@ const pickImage = async () => {
     quality: 1,
   });
 
-  console.log(result);
-
   if (!result.cancelled) {
-    setImage(result.uri);
+    uploadImageTwo(result.uri , "petPhoto" )
+    .catch((error) => {
+      console.log(error)
+    })
   }
 };
-const pickImageTwo = async () => {
-  let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
-    allowsEditing: true,
-    aspect: [4, 3],
-    quality: 1,
-  });
+  const uploadImage = async (uri , imageName) =>{
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    // const storage = firebase.firestore()
 
-  console.log(result);
-
-  if (!result.cancelled) {
-    setImageTwo(result.uri);
+    var ref =  firebase.storage().ref("usersPhotos/" + imageName)
+    setImage(imageName)
+    return ref.put(blob);
   }
-};
+
+  const uploadImageTwo = async (uri , imageName) =>{
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    // const storage = firebase.firestore()
+
+    var ref =  firebase.storage().ref("petPhotos/" + imageName)
+    setImageTwo(imageName)
+    return ref.put(blob);
+  }
 
   const onsubmit = async data => {
     console.log(data)
@@ -121,7 +141,7 @@ const pickImageTwo = async () => {
         // trained: checkTrained,
         email: data.email,
         petPhotoUrl: imageTwo,
-        userPhotoUrl: image,
+        userPhotoUrl: imageOne,
         info: data.info
       }
     })

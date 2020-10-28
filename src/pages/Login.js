@@ -15,9 +15,7 @@ import { Button, Text, TextInput, View, ViewComponent, StyleSheet, Image , Alert
 import { useForm, Controller } from "react-hook-form";
 import { NavigationRouteContext, useNavigation } from '@react-navigation/native';
 import { NavigationContext } from '@react-navigation/native';
-import TabBar from "../Navigation/TabBar";
 import { ScrollView , TouchableHighlight } from "react-native-gesture-handler";
-import * as Application from 'expo-application';
 
 export default function Login(props) {
   // const [loginObject, setLoginObject] = useState({})
@@ -29,13 +27,12 @@ export default function Login(props) {
   const passwordInputRef = React.useRef();
   const navigation = useNavigation()
 
-  console.log(Application.applicationId)
 
   // function handleInputChange(event) {
   //   const { name, value } = event.target;
   //   setLoginObject({ ...loginObject, [name]: value })
   // };
-  console.log(navigation)
+  // console.log(navigation)
 
 
   const handleLoginSubmit = async data => {
@@ -158,7 +155,7 @@ export default function Login(props) {
         <View style={styles.loginBtn}>
           <LoginButton
             // disabled={!(data.userName && data.password)}
-            onPress={handleSubmit(handleLoginSubmit)}
+            onPressOfBtn={handleSubmit(handleLoginSubmit)}
           />
           <View style={styles.signUpBtn}>
             <SignupButton />

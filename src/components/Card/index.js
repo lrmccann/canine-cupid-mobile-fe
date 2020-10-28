@@ -2,18 +2,43 @@ import React, { useState , useContext  } from "react";
 import Col from "../Col";
 import { StyleSheet, Text, View , Image, Button , Platform } from 'react-native';
 import UserContext from "../../utils/UserContext";
-import "../../assets/images/man-for-test.jpeg";
-import "../../assets/images/corgi-for-test.png";
-import * as ImagePicker from 'expo-image-picker';
+// import "../../assets/images/man-for-test.jpeg";
+// import "../../assets/images/corgi-for-test.png";
+// import * as ImagePicker from 'expo-image-picker';
+import * as firebase from "firebase";
 
 
 export default function Card(props) {
-  const photoOne = require("../../assets/images/man-for-test.jpeg")
-  const photoTwo = require("../../assets/images/corgi-for-test.png")
-  const [userPhoto , setUserPhoto] = useState()
+  // const photoOne = require("../../assets/images/man-for-test.jpeg")
+  // const photoTwo = require("../../assets/images/corgi-for-test.png")
+  // const [userPhoto , setUserPhoto] = useState()
   const [userPhotoLoaded, setUserPhotoLoaded] = useState(false)
   const [petPhotoLoaded, setPetPhotoLoaded] = useState(true)
   const { user } = useContext(UserContext)
+
+  const [userPhoto , setUserPhoto] = useState()
+  const [petPhoto , setPetPhoto] = useState()
+
+  // useEffect(() => {
+  //   getFirebasePhotos()
+  //   getFirebasePhotosTwo()
+  // },[]
+  // )
+
+  // const getFirebasePhotosTwo = async () => {
+  //   await firebase.firestore().collection('usersPhotos/').doc('userPhoto').get().then(doc => {
+  //       setUserPhoto(doc)
+  //   })
+  // }
+  // const getFirebasePhotos = async () => {
+  //   await firebase.firestore().collection('petPhotos/').doc('petPhoto').get().then(doc => {
+  //      setPetPhoto(doc)
+  //   })
+  // }
+  // getFirebasePhotos()
+  // getFirebasePhotosTwo()
+
+
  
 
   function switchPictures(){
@@ -25,7 +50,7 @@ export default function Card(props) {
     // }
      {
       // setUserPhoto(props.img2)
-      setUserPhoto(photoOne)
+      // setUserPhoto(photoOne)
       setUserPhotoLoaded(true)
       setPetPhotoLoaded(false)
       // console.log(PhotoOne)
@@ -48,11 +73,9 @@ export default function Card(props) {
         <View style={styles.card}>
           <View style={styles.imgContainer}>
             <Image style={styles.cardImage}
-            alt={props.petName} source={{
-              uri : user.setUserPhotoUrl.uri
-              
-              }}
-            // src={props.petPhotoUrl} 
+            alt={props.petName} 
+            source={{ uri : props.petPhotoUrl }}
+            // source={petPhoto} 
             />
           </View>
           <View style={styles.contentCard}>
@@ -74,7 +97,11 @@ export default function Card(props) {
         </View>
         <View style={styles.card}>
         <View style={styles.imgContainer}>
-            <Image style={styles.cardImage} alt={props.userName} source={photoTwo} />
+            <Image style={styles.cardImage} 
+            alt={props.userName} 
+            source={{ uri : props.userPhotoUrl }} 
+            // source={userPhoto } 
+            />
           </View>
           <View style={styles.contentCard}>
            <Text style={{fontSize:20 , fontWeight:"bold"}}> Name: {user.petName} </Text>
@@ -150,8 +177,8 @@ const styles = StyleSheet.create ({
     textAlign: "center"
   },
   cardImage : {
-    height : 100 , 
-    width : 100,
+    height : "100%"  , 
+    width : "100%"   ,
     },
   userPhotoLoaded : {
     width: "20%" , 

@@ -15,7 +15,7 @@ import Matches from '../pages/Matches';
 import Matchnow from '../pages/Matchnow';
 import Signup from '../pages/Signup';
 import Profile from '../pages/Profile';
-import routes from "../../app.json";
+// import routes from "../../app.json";
 // import {
 //     AboutUsScreen,
 //     EditProfileScreen,
@@ -26,7 +26,7 @@ import routes from "../../app.json";
 //     SignupScreen
 // } from "../screens/index";
 
-console.log(routes.routes[0].component)
+// console.log(routes.routes[0].component)
 
 
 
@@ -148,8 +148,6 @@ useEffect( () => {
       getCurrentUserIpAddressForContext
     }}>
     <NavigationContainer style={styles.navheader} >
-    {/* <Navbar /> */}
-    {/* <View> */}
       <Stack.Navigator initialRouteName="Login" style={styles.header}>
         <Stack.Screen
          name='aboutUs'
@@ -233,12 +231,9 @@ useEffect( () => {
         options={{
           // headerShown:false
         }} />
-        {/* <Stack.Screen name='matches' component={Matches} /> */}
       </Stack.Navigator>
-      {/* </View> */}
      </NavigationContainer>
      </UserProvider>
-    //  </View>
   )
 }
 
@@ -257,134 +252,3 @@ const styles = StyleSheet.create({
   }
 
  })
-
-//  const BottomTabNav = () => {
-//   const Screens = createBottomTabNavigator()
-
-//   return(
-//           <NavigationContainer>
-//             <Stack.Navigator initialRouteName = "home">
-//             <Screens.Screen 
-//         name='aboutUs' 
-//         component={AboutUs}
-//         options={{
-//           // headerShown:false
-//         }} />        
-//         <Screens.Screen 
-//         name='editProfile' 
-//         component={EditProfile}
-//         options={{
-//           // headerShown:false
-//         }} />        
-//         <Screens.Screen 
-//         name='login' 
-//         component={Login}
-//         options={{
-//           // headerShown:false
-//         }} />        
-//         <Screens.Screen 
-//         name='matches' 
-//         component={Matches}
-//         options={{
-//           // headerShown:false
-//         }} />        
-//         <Screens.Screen 
-//         name='matchNow' 
-//         component={Matchnow}
-//         options={{
-//           // headerShown:false
-//         }} />        
-//         <Screens.Screen 
-//         name='profile' 
-//         component={Profile}
-//         options={{
-//           // headerShown:false
-//         }} />
-//                 <Screens.Screen 
-//         name='signup' 
-//         component={Signup}
-//         options={{
-//           // headerShown:false
-//         }} />
-
-
-
-//             </Stack.Navigator>
-//           </NavigationContainer>
-
-
-
-
-
-
-//   )
-//  }
-
-
-// const BottomTabNav = createBottomTabNavigator(
-//   {
-//     LoginScreen: {
-//       screen: Login,
-//       navigationOptions: {
-//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
-//         TabBarLabel: "A",
-//         // currentTabIndex: 1
-//       }
-//     },
-//     ProfileScreen: {
-//       screen: ProfileScreen,
-//       navigationOptions: {
-//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
-//         TabBarLabel: "B",
-//         // currentTabIndex: 1
-//       }
-//     },
-//     MatchNowScreen: {
-//       screen: MatchNowScreen,
-//       navigationOptions: {
-//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
-//         TabBarLabel: "C",
-//         // currentTabIndex: 1
-//       }
-//     },
-//     EditProfileScreen: {
-//       screen: EditProfileScreen,
-//       navigationOptions: {
-//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
-//         TabBarLabel: "D",
-//         // currentTabIndex: 1
-//       }
-//     },
-//     MatchesScreen: {
-//       screen: MatchesScreen,
-//       navigationOptions: {
-//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
-//         TabBarLabel: "E",
-//         // currentTabIndex: 1
-//       }
-//     }, AboutUsScreen: {
-//       screen: AboutUsScreen,
-//       navigationOptions: {
-//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
-//         TabBarLabel: "F",
-//         // currentTabIndex: 1
-//       }
-//     }, SignupScreen: {
-//       screen: SignupScreen,
-//       navigationOptions: {
-//         // tabBarIcon: ({ tintColor }) => <Icon name="###" color={tintColor} />
-//         TabBarLabel: "G",
-//         // currentTabIndex: 1
-//       }
-//     },
-//   },
-//   {
-//     tabBarComponent: TabBar,
-//     swipeEnabled: true,
-//     tabBarOptions: {
-//       activeTintColor: "#01597d",
-//       inactiveTintColor: "#ffffff",
-//     }
-//   }
-// )
-// export default createAppContainer(BottomTabNav)

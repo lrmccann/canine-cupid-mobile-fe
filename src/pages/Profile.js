@@ -11,9 +11,6 @@ import ProfDetails from "../components/ProfDetails";
 // // import Moment from 'react-moment';
 import { Text, View , StyleSheet, Image, ScrollView } from "react-native";
 import { EditProfileButton, MatchesButton, MatchNowButton } from "../components/Button";
-import { propTypes } from "react-bootstrap/esm/Image";
-import { BottomTabNav } from "../Navigation/CustomNavBar";
-import TabBar from "../Navigation/TabBar";
 
 
 
@@ -33,8 +30,10 @@ return(
 <MatchesButton />
 <MatchNowButton />
 <Card
-userPhotoUrl = {user.userPhotoUrl}
-petPhotoUrl={user.petPhotoUrl}
+// userPhotoUrl = {userPhoto}
+// petPhotoUrl={petPhoto}
+// userPhotoUrl = {user.userPhotoUrl}
+// petPhotoUrl={user.petPhotoUrl}
 petname={user.petName}
 breed={user.breed}
 age={user.age}

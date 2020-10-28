@@ -78,8 +78,8 @@ export function LoginButton( props) {
     return (
         <View style={styles.LoginButton}>
         <TouchableWithoutFeedback
-        // onPress={handleClick} 
-        onPress={props.onPress}
+        onPress={handleClick} 
+        // onPress={props.onPressOfBtn}
         >
             <Text style={styles.loginText}>Login</Text>
         </TouchableWithoutFeedback>
