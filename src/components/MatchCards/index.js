@@ -1,37 +1,115 @@
 import React, { useState, useEffect, useContext } from "react";
 import {Row , Container } from "../Grid";
 import Col from "../Col";
-import Modal from 'react-bootstrap/Modal';
+// import Modal from 'react-bootstrap/Modal';
 import Map from "../map";
 import UserContext from "../../utils/UserContext";
-import { View , Image, TextInput, Text , StyleSheet , Button, Alert } from 'react-native';
+import { View , Image, TextInput, Text , StyleSheet , Button, Alert , Modal } from 'react-native';
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import API from "../../utils/API";
+import UsersDetails from "../../pages/UsersDetails";
+import { useNavigation } from '@react-navigation/native';
+
 
 
 
 export default function MatchCards(props) {
 
     const [isLoading, setIsLoading] = useState(true)
-    const [isOpen, setIsOpen] = React.useState(false);
     const [thisUser, setThisUser] = useState("")
-    const { userForMatchesPage } = useContext(UserContext)
-    // const showModal = (errorMsg) => {
+    // gets a list of all users
+    const [allUserArray , setAllUserArray] = useState([])
+    // mapped version of all user array , returned as a list of all users
+    const [usersToFilter , setUsersToFilter] = useState([])
+    // mapped version of get users for matches page, returned as a list
+    const [getUsersForMatchesPageToMap , setGetUsersForMatchesPageToMap] = useState([])
+    // filtered names to send back for complete objects to firebase
+    const [filteredUsersForFirebase , setFilteredUsersForFirebase] = useState()
+    const { userForMatchesPage , currentUser , getUsersForMatchesPage , setSelectedUserForUDPage } = useContext(UserContext)
+
+    // const for modal
+    const [modalVisible , setModalVisible] = useState(false)
+    const [isOpen , setIsOpen] = useState(false)
+    // const for selected user to display to modal
+    const [selectedUser , setSelectedUser] = useState()
+    const navigation = useNavigation()
+    
+    useEffect(()=> {
+        // getallusers()
+        sendBackUserArray()
+    }, [sendBackUserArray]
+    )
+
+    // const getallusers = async (req , res) => {
+    //     await API.getMatchesYesByName(
+    //         currentUser.userName
+    //     )
+    //     .then((res) => setUserArray(res.data))
+    //     .finally(sendBackUserArray)
+    //     // console.log(userArray , "asdas")
+    // }
+    const sendBackUserArray =  async (req , res) => {
+        setGetUsersForMatchesPageToMap(await getUsersForMatchesPage)
+            console.log(getUsersForMatchesPage, "users for matches page on matches screen")
+            await API.moreLoginStuff({
+                 item : getUsersForMatchesPage
+            })
+            .then((res) => setAllUserArray(res.data.data))
+            .then(filterArrayData)
+            .then(setIsLoading(false))
+    }
+    const filterArrayData = async (req, res) => {
+        const arr = allUserArray.map((item , myKey) => (
+            setUsersToFilter(item)
+            // console.log(item)
+        ))
+        console.log(getUsersForMatchesPageToMap , " ta mapppppss")
+        console.log(usersToFilter , " ta filter")
+        const filterKeyWords = allUserArray.filter((word) => getUsersForMatchesPageToMap.includes(word).valueOf())
+        const otherArr =  filterKeyWords.map(async (item , myKey ) =>(
+            await API.returnObjectsInYesArray({
+                        myKey : item
+            })
+        .then((res) => console.log(res.data))
+
+        ))
+    }
+
+    const getUserObject = value => async (req ,res) => {
+        // setIsOpen(false)
+        console.log(value)
+        await API.getUserForMatchesModal(
+             value
+        )
+        .then((res) => setSelectedUser(res.data.userStuff.undefined))
+        // .then((res) => console.log(res.data.userStuff.undefined))        
+        if(selectedUser === undefined){
+            getUserObject()
+        }
+        if(selectedUser !== undefined){
+            setSelectedUserForUDPage(selectedUser)
+            navigation.navigate('usersDetails')
+        }
+    }
+
+
+
     //     setIsErrorMessage(errorMsg);
     //   };
 
-    const hideModal = () => {
-        setIsOpen(false);
-    };
-    console.log(props.arrayData)
-    console.log(props)
-    useEffect(() => {
-        if (props.length === null) {
-            setIsLoading(true)
-        } if (props.length !== null) {
-            setIsLoading(false)
-        }
-    }, [setIsLoading, props.length]
-    )
+    // const hideModal = () => {
+    //     setIsOpen(false);
+    // };
+    // console.log(props.arrayData)
+    // console.log(props)
+    // useEffect(() => {
+    //     if (props.length === null) {
+    //         setIsLoading(true)
+    //     } if (props.length !== null) {
+    //         setIsLoading(false)
+    //     }
+    // }, [setIsLoading, props.length]
+    // )
     if (isLoading) {
         return (
             <View>
@@ -39,21 +117,22 @@ export default function MatchCards(props) {
             </View>
         )
     } if (!isLoading) {
-        async function showuserDetails(id) {
-            setIsOpen(true);
-            console.log(p , "these are p ")
-            const index = userForMatchesPage.findIndex(p => p.userData.userName === id)
-            setThisUser(userForMatchesPage[index].userData)
+        // async function showuserDetails(id) {
+        //     setIsOpen(true);
+        //     console.log(p , "these are p ")
+        //     const index = userForMatchesPage.findIndex(p => p.userData.userName === id)
+        //     setThisUser(userForMatchesPage[index].userData)
             
 
-            // console.log(props.arrayData.map((item, userName , key) => (
-            // key={...item.userName},
-            // {item} = {userName}
-            // console.log()
-            // )) , "hello this is my console log")
-        }
+        //     userArray.map((item, userName , key) => (
+        //     key={...item.userName},
+        //     {item} = {userName}
+        //     // console.log()
+        //     )
+        //     )
+        // // }
         return (
-            <Container fluid>
+            <Container fixed>
                 {/* <Modal id={thisUser.userName} style={styles.userModalContent} show={isOpen} onHide={hideModal}>
                     <Modal.Header>
                         <Modal.Title> <Text style={styles.modalHeader}>{thisUser.userName}'s Profile</Text></Modal.Title>
@@ -78,44 +157,42 @@ export default function MatchCards(props) {
                         </Modal.Body>
                     </View>
                 </Modal> */}
-                {props.arrayData.map((item, myKey) => (
-                    <View key={myKey}>
-                        {console.log(item.userData.userName)}
-                        {/* {console.log(item.userData.userName)} */}
-                        {/* <Row> */}
-                        <View style={{flexDirection: "row", width:"100%"}}>
-                            <View style={styles.mainCont}>
-                                    <View style={{flexDirection:"row"}}>
-                                    <View style={styles.image} >
-                                        <View>
-                                            <Image style={styles.img}  source={item.userData.petPhotoUrl} alt={item.userData.userName} />
-                                            <View>
-                                                {/* <Text style={{fontSize : "10.72px"}}> */}
-                                                    <TouchableWithoutFeedback
-                                                     id={item.userData.userName} style={styles.userNameBtn} 
-                                                     onPress={(e) => (showuserDetails(e.item.userName))}>
-                                                         <Text>{item.userData.userName}</Text>
-                                                         </TouchableWithoutFeedback>
-                                                {/* </Text> */}
-                                            </View>
+                {getUsersForMatchesPageToMap.map((item, myKey) => (
+                       <View key={myKey}>
+                         <View style={{flexDirection: "row", width:"100%"}}> 
+                             <View style={styles.mainCont}> 
+                                     <View style={{flexDirection:"row"}}> 
+                                     <View style={styles.image} > 
+                                         <View> 
+                                             <Image style={styles.img}  
+                                            //  source={item.petPhotoUrl} 
+                                             alt={item.userName} />
+                                             <View> 
+                                                     <TouchableWithoutFeedback 
+                                                      id={item} style={styles.userNameBtn}  
+                                                        onPress={getUserObject(item)}
+                                                    > 
+                                                          <View><Text style={{fontSize:10}}>{item}</Text></View>
+                                                        </TouchableWithoutFeedback> 
+                                             </View> 
+                                         </View> 
+                                         </View> 
+                                     </View> 
+                                     <View> 
+                                     <View style={styles.messages}> 
+                                         <Text style={styles.text}>{item}{props.message}</Text> 
+                                         </View> 
+                                     </View> 
+                                     <View>
+                                     <View style={styles.messageBtn} >
+                                             <View style={{ borderTopRightRadius: 15, borderBottomRightRadius: 15, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} type="submit" className="btn" href={item.userName}><Text className="btnText" style={{ fontFamily: "Arial", fontWeight: "bold" }}>Message Now</Text></View> 
                                         </View>
-                                        </View>
-                                    </View>
-                                    <Col size="md-7">
-                                    <View style={styles.messages}>
-                                        <Text style={styles.text}>{item.userData.userName}{props.message}</Text>
-                                        </View>
-                                    </Col>
-                                    <Col size="md-3 ">
-                                    <View style={styles.messageBtn} >
-                                            <View style={{ borderTopRightRadius: 15, borderBottomRightRadius: 15, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} type="submit" className="btn" href={item.userData.email}><Text className="btnText" style={{ fontFamily: "Arial", fontWeight: "bold" }}>Message Now</Text></View>
-                                        </View>
-                                    </Col>
-                            </View>
-                            </View>
-                        {/* </Row> */}
-                    </View>
-                ))}
+                                     </View>
+                                 </View> 
+                             </View> 
+                    </View> 
+                  ))} 
+                  
             </Container>
         )
     }
@@ -168,19 +245,19 @@ const styles = StyleSheet.create({
         marginTop : "10%"
     },
     image: {
-    height: "20%",
+    height: "32%",
     width: "37%",
     // float: "left",
     /* position: absolute; */
-    paddingTop:"4%",
+    paddingTop:"1%",
     paddingLeft: "4%",
     },
     img: {
         padding: "3%",
         height: "65%",
         width: "58%",
-        marginTop: 20,
-        backgroundColor: "blue",
+        marginTop: 10,
+        backgroundColor: "gray",
         borderRadius: 50
     },
     userNameBtn : {
@@ -200,7 +277,9 @@ const styles = StyleSheet.create({
     },
     text: {
     /* padding-top: 8%; */
-    fontSize: 15,
+    fontSize: 12,
+    marginLeft : -70,
+    marginTop : 20
     // fontWeight: 450
     /* float: left; */
     },

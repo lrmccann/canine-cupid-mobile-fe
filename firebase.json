@@ -1,0 +1,12 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "rewrites" : [
+    {
+      "source" : "https://canine-cupid-img-storage.web.app",
+      "function" : "/users"
+    }
+  ]
+}

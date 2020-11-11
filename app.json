@@ -24,56 +24,22 @@
           "CAMERA",
           "ACCESS_FINE_LOCATION",
           "USE_FINGERPRINT"
-        ]
+        ],
+        "bundleIdentifier": "com.lrmccann.canine-cupid-mobile",
+        "config": {
+          "googleSignIn" : {
+            "reservedClientId": "677791653458-v02o322kn1oj85jeo9icurssql71m1r8.apps.googleusercontent.com"
+
+          }
+        }
       }
     },
+    "facebookScheme": "fb684399708713036",
+    "facebookAppId": "684399708713036",
+    "facebookDisplayName": "Expo-firebase-auth",
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "description": "just publishing so i can get my bundle id for firebase"
-  },
-  "routes": [
-    {
-      "component": "Login",
-      "name": "home",
-      "order": 1,
-      "label": "Login"
-    },
-    {
-      "component": "AboutUs",
-      "name": "aboutUs",
-      "order": 2,
-      "label": "About Us"
-    },
-    {
-      "component": "EditProfile",
-      "name": "editProfile",
-      "order": 3,
-      "label": "Edit Profile"
-    },
-    {
-      "component": "Matches",
-      "name": "matches",
-      "order": 4,
-      "label": "Matches"
-    },
-    {
-      "component": " MatchNow",
-      "name": "matchnow",
-      "order": 5,
-      "label": "Match Now"
-    },
-    {
-      "component": "Profile",
-      "name": "profile",
-      "order": 6,
-      "label": "Profile"
-    },
-    {
-      "component": "Signup",
-      "name": "signup",
-      "order": 7,
-      "label": "Sign Up"
-    }
-  ]
+  }
 }

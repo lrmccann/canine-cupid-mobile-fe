@@ -1,4 +1,4 @@
-import React, { useContext ,useEffect,useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Header from ".././components/Header";
 import UserContext from "../utils/UserContext";
 // import { Row, Container } from "../components/Grid";
@@ -9,73 +9,102 @@ import ProfDetails from "../components/ProfDetails";
 // import { EditProfileButton } from "../components/Button";
 // import Map from "../components/map";
 // // import Moment from 'react-moment';
-import { Text, View , StyleSheet, Image, ScrollView } from "react-native";
+import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
 import { EditProfileButton, MatchesButton, MatchNowButton } from "../components/Button";
-import { propTypes } from "react-bootstrap/esm/Image";
-import { BottomTabNav } from "../Navigation/CustomNavBar";
-import TabBar from "../Navigation/TabBar";
 
 
 
-export default function Profile () {
-      const { user } = useContext(UserContext)
-      const [newUser , setNewUser] = useState({})
+export default function Profile() {
+  const { currentUser , userPhotoLink , petPhotoLink  } = useContext(UserContext)
+  const [newUser, setNewUser] = useState()
 
-return(
-  <ScrollView
-  showsVerticalScrollIndicator ={false}
-  showsHorizontalScrollIndicator={false}
-  >
-<View style={styles.profileCont}>
-    <View style={styles.headerCont}>
-<Header />
-</View>
-<MatchesButton />
-<MatchNowButton />
-<Card
-userPhotoUrl = {user.userPhotoUrl}
-petPhotoUrl={user.petPhotoUrl}
-petname={user.petName}
-breed={user.breed}
-age={user.age}
-/>
+  // useEffect(()=> {
+  //   setNewUser(currentUser.items.undefined)
+  // },[currentUser]
+  // )
+  // console.log(currentUser, "current user is being consoled")
+  // console.log(newUser , "this is new useer")
+  return (
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
+    >
+      <View style={styles.profileCont}>
+        <View style={styles.headerCont}>
+          <Header />
+        </View>
+        <MatchesButton />
+        <MatchNowButton />
 
-{/* <Image style={styles.card} source={require('./images/dog-for-login.png')} /> */}
-<ProfDetails>
-  <View>
-      <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>Username :&nbsp;{user.userName} </Text></View>
-      <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>Location: &nbsp;{user.city}</Text></View>
-      <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>Zip Code: &nbsp;{user.zipCode} </Text></View>
-      <View style={{ paddingTop: "2%", marginLeft: "2.5%"}}><Text style={{fontWeight : "bold" , fontSize : 15}}>Interests: &nbsp;{user.interests}</Text></View>
-      <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>More about my pet: &nbsp;{user.info}</Text></View>
-      {/* <View style={{ paddingTop: "4%" , marginLeft: "2.5%" }}><Text>Join Date: &nbsp;&nbsp;&nbsp;{user.readableDate}</Text></View> */}
-      <View style={{paddingLeft : 233 , paddingTop : 15 }}>
-      <EditProfileButton />
+        <Card
+          // userPhotoUrl = {currentUser.userPhotoUrl}
+          // petPhotoUrl={currentUser.petPhotoUrl}
+
+          userName={currentUser.userName}
+          petName={currentUser.petName}
+          breed={currentUser.breed}
+          age={currentUser.age}
+          email={currentUser.email}
+          city={currentUser.city}
+          age={currentUser.age}
+          petPhoto={petPhotoLink}
+          userPhoto={userPhotoLink}
+          // userName={newUser.userName}
+          // petName={newUser.petName}
+          // breed={newUser.breed}
+          // age={newUser.age}
+          // email={newUser.email}
+          // city={newUser.city}
+          // age={newUser.age}
+
+        />
+
+        {/* <Image style={styles.card} source={require('./images/dog-for-login.png')} /> */}
+
+        <ProfDetails>
+        <View>
+        <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>Username :&nbsp;{currentUser.userName} </Text></View>
+          <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>Location: &nbsp;{currentUser.city}</Text></View>
+          <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>Zip Code: &nbsp;{currentUser.zipCode} </Text></View>
+          <View style={{ paddingTop: "2%", marginLeft: "2.5%"}}><Text style={{fontWeight : "bold" , fontSize : 15}}>Interests: &nbsp;{currentUser.interests}</Text></View>
+          <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>More about my pet: &nbsp;{currentUser.info}</Text></View>
+
+
+          {/* <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>Username :&nbsp;{newUser.userName} </Text></View>
+          <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>Location: &nbsp;{newUser.city}</Text></View>
+          <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>Zip Code: &nbsp;{newUser.zipCode} </Text></View>
+          <View style={{ paddingTop: "2%", marginLeft: "2.5%"}}><Text style={{fontWeight : "bold" , fontSize : 15}}>Interests: &nbsp;{newUser.interests}</Text></View>
+          <View style={{ paddingTop: "2%" , marginLeft: "2.5%" }}><Text style={{fontWeight : "bold" , fontSize : 15}}>More about my pet: &nbsp;{newUser.info}</Text></View> */}
+
+          {/* <View style={{ paddingTop: "4%" , marginLeft: "2.5%" }}><Text>Join Date: &nbsp;&nbsp;&nbsp;{user.readableDate}</Text></View> */}
+
+          <View style={{ paddingLeft: 233, paddingTop: 15 }}>
+            <EditProfileButton />
+          </View>
+        </View>
+        </ProfDetails>
+
+
+
+
       </View>
-      </View>
-      </ProfDetails>
-
-
-
-
-</View>
-{/* <TabBar /> */}
-</ScrollView>
-)
+      {/* <TabBar /> */}
+    </ScrollView>
+  )
 }
 const styles = StyleSheet.create({
-    profileCont: {
-      // backgroundColor : "rgb(232, 86, 86)",
-      height: "100%",
-      width:"100%",
-      // justifyContent:"center"
-    },
-    headerCont: {
-      flex : 2,
-      height : "50%",
-      width: "100%"
-    },
-    })
+  profileCont: {
+    // backgroundColor : "rgb(232, 86, 86)",
+    height: "100%",
+    width: "100%",
+    // justifyContent:"center"
+  },
+  headerCont: {
+    flex: 2,
+    height: "50%",
+    width: "100%"
+  },
+})
 // let Profile = (props) => {
 //     const { user } = useContext(UserContext)
 //     const [clicked , setClicked] = useState("hello")

@@ -91,12 +91,12 @@ export default function Matchnow() {
     console.log("next", next, cuttedArrey2);
 
     //getter of next user data 
-    async function getNewUser(name) {
-        await API.getUserByName(name)
-            .then(response => {
-                setNextUserData(response.data);
-            })
-    };
+    // async function getNewUser(name) {
+    //     await API.getUserByName(name)
+    //         .then(response => {
+    //             setNextUserData(response.data);
+    //         })
+    // };
     //setter of a matched Yes name in to array of loged users data
     async function setNewMatchesYes(name1, name2) {
         await API.setUsersYesMatches(name1, name2)

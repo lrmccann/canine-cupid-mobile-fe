@@ -14,25 +14,17 @@ import { Text, TextInput, View, StyleSheet, ScrollView, Button, Alert , Platform
 import { useForm, Controller } from "react-hook-form";
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from 'react-native-elements'
-import { TouchableHighlight , TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 // import ImagePickerExample from "../components/ImageSelector/ImagePicker";
 import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
-import firebase from "firebase/app";
-import 'firebase/storage';
-// var config = {
-//   apiKey : AIzaSyDA4b2aSJHC3pQ9QgXN69s9IQGGRy4mEh4 ,
-//   authDomain :   ,
-//   databaseURL : "https://canine-cupid-img-storage.firebaseio.com"  ,
-//   projectId: "canine-cupid-img-storage" ,
-//   storageBucket : "/userPhotos" ,
-//   messagingSenderId 677791653458 : 
-// }
+import * as firebase from "firebase";
+import {withFirebaseHOC} from "../../Firebase";
+import Firebase from "../../Firebase";
 
 
-export default function Signup() {
+  function Signup() {
   const [toggleCheckBox, setToggleCheckBox] = useState(false)
-  const { getData, getAllUsersNames } = useContext(UserContext)
+  const { currentUser , authorizedUserToken , getDataAfterLogin } = useContext(UserContext)
   const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
   const { control, handleSubmit, getValues, setValue, register } = useForm();
   const history = useHistory();
@@ -56,9 +48,22 @@ export default function Signup() {
   const [checkBall, setCheckBall] = useState(false)
   const [checkFrisbee, setCheckFrisbee] = useState(false)
   const [checkPupCup , setCheckPupCup] = useState(false)
-// const for imagePicker   just checking if this works
-  const [image, setImage] = useState(null);
+// const for firebase
+  const [imageOne, setImage] = useState(null);
   const [imageTwo, setImageTwo] = useState(null);
+  const [Email , setEmail] = useState("")
+  const [Password , setPassword] = useState("")
+  const [Age , setAge] = useState("")
+  const [ZipCode , setZipCode] = useState("")
+  const [petName , SetPetName] = useState("")
+  const [PetPhotoUrl , SetPetPhotoUrl] = useState("")
+  const [UserPhotoUrl , SetUserPhotoUrl] = useState("")
+  const [Breed , SetBreed] = useState("")
+  const [Info , SetInfo] = useState("") 
+  const [City , SetCity] = useState("")
+  const [UserName , SetUserName] = useState("")
+
+
 
 useEffect(() => {
   (async () => {
@@ -68,71 +73,126 @@ useEffect(() => {
         alert('Sorry, we need camera roll permissions to make this work!');
       }
     }
+    // console.log(storage)
   })();
 }, []);
 
-const pickImage = async () => {
+const pickImage = async data => {
   let result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.All,
     allowsEditing: true,
     aspect: [4, 3],
     quality: 1,
   });
-
-  console.log(result);
-
   if (!result.cancelled) {
-    setImage(result.uri);
-  }
-};
-const pickImageTwo = async () => {
-  let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
-    allowsEditing: true,
-    aspect: [4, 3],
-    quality: 1,
-  });
-
-  console.log(result);
-
-  if (!result.cancelled) {
-    setImageTwo(result.uri);
-  }
-};
-
-  const onsubmit = async data => {
-    console.log(data)
-    navigation.navigate('profile')
-    let formValid = formFrontendValidations();
-    if (formValid === true) {
-    await API.saveUser({
-      password: data.password,
-      userData: {
-        userName: data.userName,
-        petName: data.petName,
-        zipCode: data.zipcode,
-        city: data.city,
-        breed: data.breed,
-        age: data.age,
-        // park: checkPark,
-        // ball: checkBall,
-        // frisbee: checkFrisbee,
-        // vaccinated: checkVaccinated,
-        // trained: checkTrained,
-        email: data.email,
-        petPhotoUrl: imageTwo,
-        userPhotoUrl: image,
-        info: data.info
-      }
+    // setImage(result.uri)
+    uploadImage(result.uri , `${Email}-userPhoto` )
+    .catch((error) => {
+      console.log(error)
     })
-      .then(res => handleSignupResponse(res))
-      .catch(error => console.log(error.response))
-
-    // console.log('Form Data' , data );
+    // .then(() =>{
+    //   Alert.alert("success")
+    // })
+    // .catch((error)=> {
+    //   Alert.alert(error);
+    // })
   }
-}
+};
+const pickImageTwo = async data => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
 
-  const getAllNames = async  (sessionToken, arrYes ) => {
+  if (!result.cancelled) {
+    uploadImageTwo(result.uri , `${Email}-petPhoto` )
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+};
+  const uploadImage = async (uri , imageName) =>{
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    // const storage = firebase.firestore()
+
+    var ref =  firebase.storage().ref("usersPhotos/" + imageName)
+    setImage(imageName)
+    return ref.put(blob);
+  }
+
+  const uploadImageTwo = async (uri , imageName) =>{
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    // const storage = firebase.firestore()
+
+    var ref =  firebase.storage().ref("petPhotos/" + imageName)
+    setImageTwo(imageName)
+    return ref.put(blob);
+  }
+
+  const fieldValidation = () => {
+    let validEmailFormat = validEmailRegex.test(Email)
+    let userNameValid =(UserName.length > 4 && UserName.length < 21)
+    let passwordValid = (Password.length > 4 && Password.length < 21)
+    let emailValid = (Email.length > 0 && validEmailFormat)
+    let petNameValid =  (petName)    
+    console.log("valids", userNameValid, passwordValid, emailValid, petNameValid) 
+    let fieldsValid = userNameValid && passwordValid && emailValid && petNameValid
+    if(!fieldsValid){
+      console.log("Please fill out all required fields")
+      return false
+    }else{
+      return true
+    }
+  }
+  
+  async function handleOnSignup () {
+    let validForms = fieldValidation();
+    if(validForms === true){
+    // await Firebase.signupWithEmail(Email , Password)
+    await firebase.auth().createUserWithEmailAndPassword(Email , Password)
+  //   .then((snap) => {const items = snap.docs.reduce((res , item) => ({...res , [item.useName] :item.data() }),
+  //   {}
+  //   )
+  //   getDataAfterLogin({items})
+  // })
+    .then(createUser)
+    }else{
+      console.log("Error, please try again")
+    }
+  }
+  async function createUser () {
+    const userData = ({"email" : Email , "password" : Password , "age": Age ,
+    "zipCode" : ZipCode , "petName" : petName , "petPhotoUrl": PetPhotoUrl , "userPhotoUrl": UserPhotoUrl ,
+    "breed": Breed ,"info" : Info , "city": City , "userName": UserName})
+    const db = firebase.firestore().collection('users')
+    await db.add(userData)
+    .then(getDataAfterLogin(userData))
+    .then(()=> {
+      authorizedUserToken(true)
+    })
+    // .then(getUserForNextPage)
+    // .then(createAdminUser)
+    //.then(getAllNames()) ////////// get all usernames from firebase and then we filter through them and pull out users in yes and no array
+    //.then(getData())     ///////// get the username, password and session token from firebase
+    .then(navigation.navigate('profile'))
+  }
+console.log(currentUser)
+  // const getUserForNextPage = async () => {
+  //   const db = firebase.firestore().collection('users')
+  //   await db.where ("email" , "==" , Email).get()
+  //   .then((snap) => {const items = snap.docs.reduce((res , item) => ({...res , [item.userName] : item.data()}),
+  //   {}
+  //   )
+  // getDataAfterLogin({items})
+  // console.log(currentUser , "user for next page")
+  // })
+  // }
+
+  const getAllNames = async (sessionToken, arrYes ) => {
     console.log("getAllNames")
     await API.getAllUsers(sessionToken)
       .then((res) => {
@@ -157,13 +217,6 @@ const pickImageTwo = async () => {
       }
       )
   }
-  //   // Handles updating component state when the user types into the input field
-
-  // function handleInputChange(event) {
-  //   event.preventDefault();
-  //   const { name, value } = event.target;
-  //    setFormObject({ ...formObject, [name]: value })
-  // };
 
   function handleSignupResponse(res) {
     console.log("res.data", res.data)
@@ -175,26 +228,6 @@ const pickImageTwo = async () => {
       getData(res.data);
       getAllNames(res.data.sessionToken, res.data.matchesYes);
       navigation.navigate('profile')
-    };
-  };
-  const formFrontendValidations  = async => { 
-    let newVal = getValues();
-    console.log(newVal , "loooook at meeee")
-    // console.log(control , " i be the control thang")
-    let validEmailFormat = validEmailRegex.test(newVal.email)
-    let userNameValid =(newVal.userName.length > 4 && newVal.userName.length < 21)
-    let passwordValid = (newVal.password.length > 4 && newVal.password.length < 21)
-    let emailValid = (newVal.email.length > 0 && validEmailFormat)
-    let petNameValid =  newVal.petName.length > 0    
-    console.log("valids", userNameValid, passwordValid, emailValid, petNameValid) 
-    let fieldsValid = userNameValid && passwordValid && emailValid && petNameValid
-    if (!fieldsValid) {
-      let errorMsg = "Please fill ALL the required fields correctly i.e. Username (5-20 characters) , Password (5-20 Characters) , Email (in valid @format) and Petname (required)";
-      // showModal(errorMsg);
-      return false
-    }
-    else {
-      return true
     };
   };
   return (
@@ -226,8 +259,8 @@ const pickImageTwo = async () => {
                 onBlur={onBlur}
                 ref={userNameInputRef}
                 style={styles.userInfoInput}
-                onChangeText={value =>
-                  onChange(value)
+                onChangeText={userName =>
+                  SetUserName(userName)
                 }
               />}
           />
@@ -240,13 +273,15 @@ const pickImageTwo = async () => {
               passwordInputRef.current.focus()
             }}
             render={({ onChange, onBlur, value }) =>
+            
               <TextInput
                 onBlur={onBlur}
                 ref={passwordInputRef}
                 style={styles.userInfoInput}
-                onChangeText={value =>
-                  onChange(value)
-                } />}
+                onChangeText={password =>
+                  // onChange(value)
+                  setPassword(password)
+                }/>}
           />
           <Text style={styles.categoryText}>User photo</Text>
           <Controller
@@ -290,8 +325,8 @@ const pickImageTwo = async () => {
                 onBlur={onBlur}
                 ref={emailInputRef}
                 style={styles.userInfoInput}
-                onChangeText={value =>
-                  onChange(value)
+                onChangeText={email =>
+                  setEmail(email)
                 } />}
           />
           <Text style={styles.categoryText}>City</Text>
@@ -307,8 +342,8 @@ const pickImageTwo = async () => {
                 onBlur={onBlur}
                 ref={cityInputRef}
                 style={styles.userInfoInput}
-                onChangeText={value =>
-                  onChange(value)
+                onChangeText={city =>
+                  SetCity(city)
                 }
               />}
           />
@@ -325,8 +360,9 @@ const pickImageTwo = async () => {
                 onBlur={onBlur}
                 ref={zipecodeInputRef}
                 style={styles.userInfoInput}
-                onChangeText={value =>
-                  onChange(value)
+                onChangeText={zipCode =>
+                  setZipCode(zipCode)
+                  // onChangeText={(value) => onChange(value)}5 
                 } />}
           />
         </View>
@@ -347,8 +383,8 @@ const pickImageTwo = async () => {
                 onBlur={onBlur}
                 ref={petNameInputRef}
                 style={styles.userInfoInput}
-                onChangeText={value =>
-                  onChange(value)
+                onChangeText={petName =>
+                  SetPetName(petName)
                 }
               />}
           />
@@ -365,8 +401,8 @@ const pickImageTwo = async () => {
                 onBlur={onBlur}
                 ref={breedInputRef}
                 style={styles.userInfoInput}
-                onChangeText={value =>
-                  onChange(value)
+                onChangeText={breed =>
+                  SetBreed(breed)
                 } />}
           />
           <Text style={styles.categoryText}>Pet age</Text>
@@ -482,15 +518,16 @@ const pickImageTwo = async () => {
                 onBlur={onBlur}
                 ref={infoInputRef}
                 style={styles.userInfoInput}
-                onChangeText={value =>
-                  onChange(value)
+                onChangeText={info =>
+                  SetInfo(info)
                 } />}
           />
         </View>
-        <TouchableWithoutFeedback style={styles.signUpBtn}
+        <TouchableWithoutFeedback 
+        style={styles.signUpBtn}
           // onPress={handleSubmit(handleFormSubmit)
-          onPress={handleSubmit(onsubmit)
-          }
+          // onPress={handleSubmit(onsubmit)}
+          onPress={handleOnSignup}
         >
           <Text style={styles.signUpBtnText}>Sign Up</Text>
         </TouchableWithoutFeedback>
@@ -498,6 +535,8 @@ const pickImageTwo = async () => {
     </ScrollView>
   )
 }
+export default withFirebaseHOC(Signup)
+
 const styles = StyleSheet.create({
   header: {
     flex: 1
