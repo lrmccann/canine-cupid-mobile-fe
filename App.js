@@ -23,12 +23,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 // import Navbar from './src/components/Navbar';
 // import  {AsyncLocalStorage}  from '@react-native-community/async-storage';
 // import Router from "./src/Navigation/TabBar";
-import TabBar from './src/Navigation/TabBar';
 import { View } from 'react-native';
+import Firebase, {FirebaseProvider} from "./Firebase";
+import BottomTabBar from "./src/Navigation/BottomTabBar";
 
 
-
-const Stack = createStackNavigator();
+// const Stack = createStackNavigator();
 
 export default function App() {
 
@@ -38,10 +38,13 @@ export default function App() {
 
   return (
     <View style={{minHeight:"100%"}}>
+      <FirebaseProvider value={Firebase}>
       <MainStackNavigator >
        <StatusBar style="auto" />
     {/* //  </UserProvider> */}
+    <BottomTabBar />
     </MainStackNavigator>
+    </FirebaseProvider>
     {/* <TabBar /> */}
     </View>
 

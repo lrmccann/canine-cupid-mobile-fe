@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
 import API from "../../utils/API";
@@ -67,19 +67,19 @@ export function XButton(props) {
 // }
 export function LoginButton( props) {
     const navigation = useNavigation()
-    const { user  } = useContext(UserContext)
-    const STORAGE_KEY = user.sessionToken
-    // console.log(STORAGE_KEY)
-    AsyncStorage.setItem('STORAGE_KEY' , STORAGE_KEY);
-    console.log(AsyncStorage , "herrrrooooooo")
-    function handleClick() {
-       navigation.navigate('profile')
-    }
+    // const { user  } = useContext(UserContext)
+    // const STORAGE_KEY = user.sessionToken
+    // // console.log(STORAGE_KEY)
+    // AsyncStorage.setItem('STORAGE_KEY' , STORAGE_KEY);
+    // console.log(AsyncStorage , "herrrrooooooo")
+    // function handleClick() {
+    //    navigation.navigate('profile')
+    // }
     return (
         <View style={styles.LoginButton}>
         <TouchableWithoutFeedback
-        onPress={handleClick} 
-        // onPress={props.onPressOfBtn}
+        // onPress={handleClick} 
+        onPress={props.onPressOfBtn}
         >
             <Text style={styles.loginText}>Login</Text>
         </TouchableWithoutFeedback>
@@ -277,21 +277,29 @@ export function MatchNowButton() {
 }
 
 export function MatchesButton() {
-    const {userForMatchesPage, getAllMatchesForMatchesPage, user} = useContext(UserContext)
+    const {userForMatchesPage, getAllUsersForMatchesPage , getUsersForMatchesPage , currentUser} = useContext(UserContext)
+    const [userArray , setUserArray] = useState([])
     const navigation = useNavigation()
-    // const history = useHistory();
-    let newVar = user
-    const getUserDataById = async () => {
-        await API.getMatchesYesByName(newVar.userName)
-        .then(response => getAllMatchesForMatchesPage(response.data))
-        
-    }
-    async function handleClick(user) {
-        console.log(userForMatchesPage, "anytext")
-        await getUserDataById(user)
-        // .then(history.push("/matches"))
+    const handleClick = async () => {
+        await API.getMatchesYesByName(
+            currentUser.userName
+        )
+        .then((res) => getAllUsersForMatchesPage(res.data))
+        // .then(console.log(getUsersForMatchesPage , " lets see if this consoles"))
         .then(navigation.navigate('matches'))
     }
+    // const history = useHistory();
+    // let newVar = user
+    // const getUserDataById = async () => {
+        // await API.getMatchesYesByName(newVar.userName)
+        // .then(response => getAllMatchesForMatchesPage(response.data))
+        
+    // }
+    // async function handleClick(user) {
+        // console.log(userForMatchesPage, "anytext")
+        // await getUserDataById(user)
+        // .then(navigation.navigate('matches'))
+    // }
     return (
         <View style={styles.matchesBtn}>
     <TouchableWithoutFeedback

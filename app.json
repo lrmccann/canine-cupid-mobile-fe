@@ -24,10 +24,19 @@
           "CAMERA",
           "ACCESS_FINE_LOCATION",
           "USE_FINGERPRINT"
-        ]
-      },
-      "bundleIdentifier": "com.lrmccann.canine-cupid-mobile"
+        ],
+        "bundleIdentifier": "com.lrmccann.canine-cupid-mobile",
+        "config": {
+          "googleSignIn" : {
+            "reservedClientId": "677791653458-v02o322kn1oj85jeo9icurssql71m1r8.apps.googleusercontent.com"
+
+          }
+        }
+      }
     },
+    "facebookScheme": "fb684399708713036",
+    "facebookAppId": "684399708713036",
+    "facebookDisplayName": "Expo-firebase-auth",
     "web": {
       "favicon": "./assets/favicon.png"
     },
